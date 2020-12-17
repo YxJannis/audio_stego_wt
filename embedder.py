@@ -70,8 +70,11 @@ class Embedder:
         #  wenn wir noch detecten wollen. Mit type 'float32' kommt das extrem "laute" Signal zustande.
         #  Vlt. ist scipy.io.wavfile die falsche library. Evtl. mit Librosa probieren.
         wavfile.write("wtmrkd_signal.wav", self.audio_file.sampling_frequency, reconstructed_signal.astype('int16'))
-        # librosa.output.write_wav(path, self.audiosignal, self.samplerate)
-        # self.audiosignal, self.samplerate = librosa.load(path, mono=True, samplerate=00000, offset=..., duration=...) Siehe audio.py
+        # librosa.output.write_wav(path, self.audiosignal, self.samplerate) audiosignal = mono or stereo, samplerate als int, norm für die amplitute [-1,1]
+        # TODO replace output.write_wav mit soundfile.write, da write_wav mit Librosa 0.8 entfernt wird
+        #  .load(path, samplerate, mono, offset, duration)
+        # self.audiosignal, self.samplerate = librosa.load(path, mono=True, samplerate=00000, offset=..., duration=...) Siehe audio.py ,default samplerate=22050
+
 
 if __name__ == '__main__':
     sa_chen_promenade = AudioFile('SaChenPromenade1.wav')

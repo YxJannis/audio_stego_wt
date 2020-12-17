@@ -1,5 +1,6 @@
 import random
 import pywt
+import librosa
 from scipy.io import wavfile
 from audio_file import AudioFile
 
@@ -48,6 +49,9 @@ class Embedder:
         # dwt on audio_file
         self.approx_coeffs, self.detail_coeffs = self.audio_file.dwt(self.wavelet_type)
         # TODO: detail_coefficients array struktur durchschauen, warum ist das array so aufgebaut?
+        #  dwt benötigt EIGTL 2 Parameter. Data (input signal [array_like]) und wavelet (object oder name)
+        #  optional sind: Modes (Signal extension modes, siehe https://pywavelets.readthedocs.io/en/latest/ref/signal-extension-modes.html#ref-modes)
+        #  und die axis, über welche die dwt berechnet werden sollen.
         self.marked_detail_coeffs = self.detail_coeffs
         print(self.detail_coeffs)
 
@@ -66,7 +70,8 @@ class Embedder:
         #  wenn wir noch detecten wollen. Mit type 'float32' kommt das extrem "laute" Signal zustande.
         #  Vlt. ist scipy.io.wavfile die falsche library. Evtl. mit Librosa probieren.
         wavfile.write("wtmrkd_signal.wav", self.audio_file.sampling_frequency, reconstructed_signal.astype('int16'))
-
+        # librosa.output.write_wav(path, self.audiosignal, self.samplerate)
+        # self.audiosignal, self.samplerate = librosa.load(path, mono=True, samplerate=00000, offset=..., duration=...) Siehe audio.py
 
 if __name__ == '__main__':
     sa_chen_promenade = AudioFile('SaChenPromenade1.wav')

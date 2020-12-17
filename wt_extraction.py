@@ -6,11 +6,84 @@ from scipy.fftpack import fft
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import librosa as lro
+import struct
 
-audio_file_promenade_1 = "SaChenPromenade1.wav"
+audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 
 
-def read_audio_data(file_path):
+# https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
+def bin2float(b):
+    ''' Convert binary string to a float.
+
+    Attributes:
+        :b: Binary string to transform.
+    '''
+    h = int(b, 2).to_bytes(8, byteorder="big")
+    return struct.unpack('>d', h)[0]
+
+
+def float2bin(f):
+    ''' Convert float to 64-bit binary string.
+
+    Attributes:
+        :f: Float number to transform.
+    '''
+    [d] = struct.unpack(">Q", struct.pack(">d", f))
+    return f'{d:064b}'
+
+
+def process_audio_librosa():
+    audio_file = "input_files/SaChenPromenade1.wav"
+    signal_data, sample_rate = lro.load(audio_file, mono=False, sr=None)
+    signal_size = len(signal_data)
+    # sr=None keeps original sample rate, default value is 22050
+    # signal_data = floating point numpy.ndarray where signal_data[t] corresponds
+    # to the amplitude of the waveform at sample t. Dimensions of array = number of channels.
+    # If you only want one channel, set mono=True. This converts the signal to mono (from e.g. stereo)
+    print(f'Size of signal data: {signal_size}')
+    print(signal_data)
+    print(sample_rate)
+
+    approx_coeffs, detail_coeffs = pywt.dwt(signal_data, 'db2')
+
+    print(f'Approx coeffs: \n{approx_coeffs}')
+    print(f'Detail coeffs: \n{detail_coeffs}')
+
+    # choose message to be embedded as bitstring
+    # only 1s
+    msg = ""
+    for i in range(len(detail_coeffs[0])):
+        msg = msg + '1'
+
+
+    # only use detail_coeffs of first channel to embed in this case:
+    new_dc = detail_coeffs
+    print(f'new_dc: {new_dc}')
+
+    for i in range(len(detail_coeffs[0])):
+        val = detail_coeffs[0][i]
+        #print(f'old val: {val}')
+        bin_val_list = list(float2bin(val))
+        if msg[i] == '1':
+            bin_val_list[-1] = '1'
+        elif msg[i] == '0':
+            bin_val_list[-1] = '0'
+
+        new_bin_val = "".join(bin_val_list)
+        #print(f'new val: {bin2float(new_bin_val)}')
+        new_val = bin2float(new_bin_val)
+        new_dc[0][i] = new_val
+
+    print(f'new_dc after embedding: {new_dc}')
+    reconstructed_signal = pywt.idwt(approx_coeffs, new_dc, 'db2')
+    lro.output.write_wav("output_files/librosa_lsn_wtrmrkd.wav", np.asfortranarray(reconstructed_signal), sample_rate)
+
+
+process_audio_librosa()
+
+
+def read_audio_data2(file_path):
     sampling_frequency, audio_data = wavfile.read(file_path)
     return sampling_frequency, audio_data
 
@@ -71,7 +144,7 @@ def reconstruct_audio(approx_coeffs, detail_coeffs, wavelet_type, sampling_freq)
 
 def do():
     wavelet_type = 'db3'
-    sampling_freq, audio_data = read_audio_data(audio_file_promenade_1)
+    sampling_freq, audio_data = read_audio_data2(audio_file_promenade_1)
     ac, dc, length = perform_dwt(sampling_freq, audio_data, wavelet_type)
     new_dc = embed_message(dc)
     reconstruct_audio(ac, new_dc, wavelet_type, sampling_freq)
@@ -177,6 +250,3 @@ def test():
     plt.xlabel("Time [s]")
     plt.ylabel("Amplitude")
     plt.show()
-
-
-test()

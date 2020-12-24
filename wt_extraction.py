@@ -1,12 +1,11 @@
 import pywt
-from os.path import dirname, join as pjoin
 from scipy.io import wavfile
-import scipy.io
 from scipy.fftpack import fft
 import matplotlib.pyplot as plt
 import numpy as np
 import random
 import librosa as lro
+import soundfile
 import struct
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
@@ -24,23 +23,24 @@ def bin2float(b):
 
 # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
 def float2bin(f):
-    ''' Convert float to 64-bit binary string.
+    ''' Convert float to 32-bit binary string.
 
     Attributes:
         :f: Float number to transform.
     '''
     [d] = struct.unpack(">Q", struct.pack(">d", f))
-    return f'{d:064b}'
+    return f'{d:032b}'
 
 
 # choose bit of detail coefficient (0-63) where to embed the message
 # the later the bit, the less reliable detection becomes (due to compression?)
-embed_bit = 21
+embed_bit = 14
 
 
 def process_audio_librosa():
     print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> EMBED_BIT={embed_bit}\n--------------------------')
     audio_file = "input_files/SaChenPromenade1.wav"
+    # TODO: use soundfile.read?
     signal_data, sample_rate = lro.load(audio_file, mono=False, sr=None)
     # sr=None keeps original sample rate, default value is 22050
     # signal_data = floating point numpy.ndarray where signal_data[t] corresponds
@@ -87,8 +87,10 @@ def process_audio_librosa():
 
     # reconstruct signal with embedded watermark
     reconstructed_signal = pywt.idwt(approx_coeffs, new_dc, 'db2')
+    print(f'{reconstructed_signal}')
     output_file_name = 'output_files/wt_bit' + str(embed_bit) + '_embedding.wav'
-    lro.output.write_wav(output_file_name, np.asfortranarray(reconstructed_signal), sample_rate)
+    # TODO: solve this error so that embedding still works:
+    soundfile.write(output_file_name, reconstructed_signal, sample_rate)
 
 
 def extract_watermark_librosa():

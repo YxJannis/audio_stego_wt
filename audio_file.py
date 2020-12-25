@@ -30,6 +30,16 @@ class AudioFile:
         self.size = self.signal_data.shape[0]
         self.max_message_len = self.size / self.sampling_rate
 
+    def write_file(self, transpose: bool = True):
+        """
+        Write signal data, sampling rate to file path
+        :param transpose: True if signal data needs to be transposed (e.g. using soundfile.read and write)
+        """
+        if transpose:
+            soundfile.write(self.file_path, self.signal_data.T, self.sampling_rate, subtype='PCM_32')
+        else:
+            soundfile.write(self.file_path, self.signal_data, self.sampling_rate, subtype='PCM_32')
+
     # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
     @staticmethod
     def bin2float(b):

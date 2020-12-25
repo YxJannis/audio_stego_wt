@@ -1,8 +1,6 @@
-import random
 import pywt
 from audio_file import AudioFile
-import struct
-import soundfile
+from detector import Detector
 
 
 class Embedder:
@@ -15,8 +13,8 @@ class Embedder:
         """
         Initialize Embedder.
         :param audio_file: Valid :py:class: `audio_file` object.
-        :param wavelet_type: Optional wavelet type. Default = 'db2'.
-        :param msg: Optional message as bitstring. Default = randomly generated bitstring.
+        :param wavelet_type: Type of mother wavelet. Default = 'db2'.
+        :param msg: Message as bitstring. Default = randomly generated bitstring.
         :param embed_bit: Position of bit in 32 bit floating point number where to embed message bits in coefficient.
         :param output_file_name: File name of embedded file.
         """
@@ -80,11 +78,16 @@ class Embedder:
     def reconstruct_and_write(self):
         """
         Reconstruct audio signal using inverse discrete wavelet transform and write to .wav file.
+        :return: Reconstructed AudioFile with message embedded
         """
-        reconstructed_signal = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs, self.wavelet_type)
-        soundfile.write(self.output_file_name, reconstructed_signal.T, self.audio_file.sampling_rate, subtype='PCM_32')
+        reconstructed_audio = AudioFile(self.output_file_name)
+        reconstructed_audio.signal_data = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs, self.wavelet_type)
+        reconstructed_audio.write_file(transpose=True)
+        return reconstructed_audio
 
 
 if __name__ == '__main__':
-    sa_chen_promenade = AudioFile('SaChenPromenade1.wav')
+    sa_chen_promenade = AudioFile('input_files/SaChenPromenade1.wav')
     Embedder(sa_chen_promenade)
+    marked_sa_chen_promenade = AudioFile('output_files/output_files/wt_bit' + str(23) + '_embedding.wav')
+    Detector(marked_sa_chen_promenade)

@@ -1,14 +1,25 @@
 import random
 import pywt
-import librosa as lro
-from scipy.io import wavfile
 from audio_file import AudioFile
 import struct
+import soundfile
 
 
 class Embedder:
+    """
+    Embed messages in wavelet (transform) domain.
+    """
+
     def __init__(self, audio_file: AudioFile, wavelet_type: str = "db2", msg: str = None, embed_bit: int = 10,
                  output_file_name: str = None):
+        """
+        Initialize Embedder.
+        :param audio_file: Valid :py:class: `audio_file` object.
+        :param wavelet_type: Optional wavelet type. Default = 'db2'.
+        :param msg: Optional message as bitstring. Default = randomly generated bitstring.
+        :param embed_bit: Position of bit in 32 bit floating point number where to embed message bits in coefficient.
+        :param output_file_name: File name of embedded file.
+        """
         self.wavelet_type = wavelet_type
         self.audio_file = audio_file
         self.embed_bit = embed_bit
@@ -34,7 +45,7 @@ class Embedder:
         self.detail_coeffs = None
         self.marked_detail_coeffs = None
         self.embed()
-        self.reconstruct_audio()
+        self.reconstruct_and_write()
 
     # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
     @staticmethod
@@ -46,22 +57,33 @@ class Embedder:
     # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
     @staticmethod
     def float2bin(f):
-        """ Convert float to 32-bit binary string."""
+        """ Convert float to 64-bit binary string."""
         [d] = struct.unpack(">Q", struct.pack(">d", f))
-        return f'{d:032b}'
+        return f'{d:064b}'
 
     @staticmethod
     def generate_random_message(message_length):
-        # generate integer of size 'message_length'
+        """
+        Generate random message as a bitstring.
+        :param message_length: Length of random message.
+        :return: Random bitstring.
+        """
         random_int = random.randint(0, 2**message_length - 1)
-        # convert integer to bitstring
         msg = '{0:b}'.format(random_int).zfill(message_length)
         return msg
 
     def embed(self):
+        """
+        Embed message in signal data using discrete wavelet transform.
+        * signal_data: raw data of AudioFile object given in init
+        * embed_bit: position of message-bit substitution in detail coefficients
+        * wavelet_type: type of mother wavelet for discrete wavelet transform. Defined in init, default 'db2'
+        * message: message to be embedded. Defined in init (or generated randomly)
+        :return:
+        """
         print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> EMBED_BIT={self.embed_bit}\n--------------------------')
-        # dwt on audio_file
-        self.approx_coeffs, self.detail_coeffs = self.audio_file.dwt(self.wavelet_type)
+        # dwt on audio_file, transpose signal data due to soundfile.read array shape
+        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, self.wavelet_type)
         self.marked_detail_coeffs = self.detail_coeffs
         print(f'Detail coefficients for channel 1: \n{self.detail_coeffs[0]}')
         print(f'Embedded message:\n (First 64 bits): {self.message[:64]}, (last 64 bits): {self.message[-64:]}')
@@ -80,15 +102,13 @@ class Embedder:
             new_val = self.bin2float(new_bin_val)
             self.marked_detail_coeffs[0][i] = new_val
         print(f'Detail coefficients of channel 1 after embedding: \n{self.marked_detail_coeffs[0]}\n')
-        # reconstruct signal with embedded watermark
-        reconstructed_signal = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs, 'db2')
-        output_file_name = 'output_files/wt_bit' + str(self.embed_bit) + '_embedding.wav'
-        # TODO: soundfile.write
-        # lro.output.write_wav(output_file_name, np.asfortranarray(reconstructed_signal), self.audio_file.sampling_rate)
 
-    def reconstruct_audio(self):
-        # TODO: is this function necessary?
-        return 0
+    def reconstruct_and_write(self):
+        """
+        Reconstruct audio signal using inverse discrete wavelet transform and write to .wav file.
+        """
+        reconstructed_signal = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs, self.wavelet_type)
+        soundfile.write(self.output_file_name, reconstructed_signal.T, self.audio_file.sampling_rate, subtype='PCM_32')
 
 
 if __name__ == '__main__':

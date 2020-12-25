@@ -32,12 +32,12 @@ class Embedder:
 
         # message size handling
         if msg is None:
-            self.message = self.generate_random_message(self.max_message_length)
+            self.message = AudioFile.generate_random_message(self.max_message_length)
         else:
             if len(msg) > self.max_message_length:
                 print("Message (in bits) can not be longer than " + str(self.max_message_length) +
                       ". Generating file with random message using maximal length.")
-                self.message = self.generate_random_message(self.max_message_length)
+                self.message = AudioFile.generate_random_message(self.max_message_length)
             else:
                 self.message = msg.zfill(self.max_message_length)
 
@@ -47,31 +47,6 @@ class Embedder:
         self.embed()
         self.reconstruct_and_write()
 
-    # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
-    @staticmethod
-    def bin2float(b):
-        """ Convert binary string to a float. """
-        h = int(b, 2).to_bytes(8, byteorder="big")
-        return struct.unpack('>d', h)[0]
-
-    # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
-    @staticmethod
-    def float2bin(f):
-        """ Convert float to 64-bit binary string."""
-        [d] = struct.unpack(">Q", struct.pack(">d", f))
-        return f'{d:064b}'
-
-    @staticmethod
-    def generate_random_message(message_length):
-        """
-        Generate random message as a bitstring.
-        :param message_length: Length of random message.
-        :return: Random bitstring.
-        """
-        random_int = random.randint(0, 2**message_length - 1)
-        msg = '{0:b}'.format(random_int).zfill(message_length)
-        return msg
-
     def embed(self):
         """
         Embed message in signal data using discrete wavelet transform.
@@ -79,7 +54,6 @@ class Embedder:
         * embed_bit: position of message-bit substitution in detail coefficients
         * wavelet_type: type of mother wavelet for discrete wavelet transform. Defined in init, default 'db2'
         * message: message to be embedded. Defined in init (or generated randomly)
-        :return:
         """
         print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> EMBED_BIT={self.embed_bit}\n--------------------------')
         # dwt on audio_file, transpose signal data due to soundfile.read array shape
@@ -92,14 +66,14 @@ class Embedder:
         # convert float coefficient into binary representation and flip last bit to 1 or 0 according to the message
         for i in range(len(self.detail_coeffs[0])):
             val = self.detail_coeffs[0][i]
-            bin_val_list = list(self.float2bin(val))
+            bin_val_list = list(AudioFile.float2bin(val))
             if self.message[i] == '1':
                 bin_val_list[self.embed_bit] = '1'
             elif self.message[i] == '0':
                 bin_val_list[self.embed_bit] = '0'
 
             new_bin_val = "".join(bin_val_list)
-            new_val = self.bin2float(new_bin_val)
+            new_val = AudioFile.bin2float(new_bin_val)
             self.marked_detail_coeffs[0][i] = new_val
         print(f'Detail coefficients of channel 1 after embedding: \n{self.marked_detail_coeffs[0]}\n')
 

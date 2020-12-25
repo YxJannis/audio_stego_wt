@@ -1,5 +1,6 @@
-import pywt
 import soundfile
+import struct
+import random
 
 
 class AudioFile:
@@ -28,3 +29,28 @@ class AudioFile:
         self.signal_data, self.sampling_rate = soundfile.read(self.file_path)
         self.size = self.signal_data.shape[0]
         self.max_message_len = self.size / self.sampling_rate
+
+    # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
+    @staticmethod
+    def bin2float(b):
+        """ Convert binary string to a float. """
+        h = int(b, 2).to_bytes(8, byteorder="big")
+        return struct.unpack('>d', h)[0]
+
+    # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
+    @staticmethod
+    def float2bin(f):
+        """ Convert float to 64-bit binary string."""
+        [d] = struct.unpack(">Q", struct.pack(">d", f))
+        return f'{d:064b}'
+
+    @staticmethod
+    def generate_random_message(message_length):
+        """
+        Generate random message as a bitstring.
+        :param message_length: Length of random message.
+        :return: Random bitstring.
+        """
+        random_int = random.randint(0, 2**message_length - 1)
+        msg = '{0:b}'.format(random_int).zfill(message_length)
+        return msg

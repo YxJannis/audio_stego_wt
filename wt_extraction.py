@@ -118,6 +118,7 @@ def detect_with_dwt():
 
     print(f'Extracted message:\n (First 64 bits): {extracted_message[:64]}, (last 64 bits): {extracted_message[-64:]}')
 
+
 embed_with_dwt()
 detect_with_dwt()
 

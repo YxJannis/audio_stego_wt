@@ -1,6 +1,5 @@
-from scipy.io import wavfile
-import librosa as lro
 import pywt
+import soundfile
 
 
 class AudioFile:
@@ -15,12 +14,8 @@ class AudioFile:
         self.read_file()
 
     def read_file(self):
-        # read file using librosa
-        self.audio_data, self.sampling_rate = lro.load(self.file_path, mono=False, sr=None)
-        # sr=None keeps original sample rate, default value is 22050
-        # signal_data = floating point numpy.ndarray where signal_data[t] corresponds
-        # to the amplitude of the waveform at sample t. Dimensions of array = number of channels.
-        # If you only want one channel, set mono=True. This converts the signal to mono (from e.g. stereo)
+        # read file
+        self.audio_data, self.sampling_rate = soundfile.read(self.file_path)
         self.size = self.audio_data.shape[0]
         self.length = self.size / self.sampling_rate
 

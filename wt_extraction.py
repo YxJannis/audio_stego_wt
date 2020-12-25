@@ -29,33 +29,38 @@ def float2bin(f):
         :f: Float number to transform.
     '''
     [d] = struct.unpack(">Q", struct.pack(">d", f))
-    return f'{d:032b}'
+    return f'{d:064b}'
 
 
 # choose bit of detail coefficient (0-63) where to embed the message
-# the later the bit, the less reliable detection becomes (due to compression?)
-embed_bit = 14
+embed_bit = 23
 
 
-def process_audio_librosa():
+def test_audiofile():
+    audio_file = "input_files/SaChenPromenade1.wav"
+    signal_data, sample_rate = soundfile.read(audio_file)
+    lro_signal_data, lro_sample_rate = lro.load(audio_file, mono=False, sr=None)
+    print(f'Soundfile: {signal_data.T} and {sample_rate}')
+    print(f'Librosa: {lro_signal_data} and {lro_sample_rate}')
+
+
+#test_audiofile()
+
+
+def embed_with_dwt():
     print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> EMBED_BIT={embed_bit}\n--------------------------')
     audio_file = "input_files/SaChenPromenade1.wav"
-    # TODO: use soundfile.read?
-    signal_data, sample_rate = lro.load(audio_file, mono=False, sr=None)
-    # sr=None keeps original sample rate, default value is 22050
-    # signal_data = floating point numpy.ndarray where signal_data[t] corresponds
-    # to the amplitude of the waveform at sample t. Dimensions of array = number of channels.
-    # If you only want one channel, set mono=True. This converts the signal to mono (from e.g. stereo)
-    # print(f'Signal data: {signal_data}')
-    # print(f'Sample rate: {sample_rate}')
+    signal_data, sample_rate = soundfile.read(audio_file)
+    # dtype=np.float32 is also an option
+    # signal_data, sample_rate = lro.load(audio_file, mono=False, sr=None)
 
-    approx_coeffs, detail_coeffs = pywt.dwt(signal_data, 'db2')
+    approx_coeffs, detail_coeffs = pywt.dwt(signal_data.T, 'db2')
 
     # print(f'Approx coefficients for channel 1: \n{approx_coeffs}')
     print(f'Detail coefficients for channel 1: \n{detail_coeffs[0]}')
 
     # choose message to be embedded as bitstring
-    # for testing: only 1s
+    # constructed for testing: all 1s except last 20 bits 0s
     message = ""
     for i in range(len(detail_coeffs[0])-20):
         message = message + '1'
@@ -68,10 +73,9 @@ def process_audio_librosa():
     new_dc = detail_coeffs
 
     # only use detail_coeffs of first channel to embed in this case.
-    # convert float coefficient into binary representation and flip last bit to 1 or 0 according to the message
+    # convert float coefficient into binary representation and flip embed_bit to 1 or 0 according to the message
     for i in range(len(detail_coeffs[0])):
         val = detail_coeffs[0][i]
-        #print(f'old val: {val}')
         bin_val_list = list(float2bin(val))
         if message[i] == '1':
             bin_val_list[embed_bit] = '1'
@@ -79,7 +83,6 @@ def process_audio_librosa():
             bin_val_list[embed_bit] = '0'
 
         new_bin_val = "".join(bin_val_list)
-        #print(f'new val: {bin2float(new_bin_val)}')
         new_val = bin2float(new_bin_val)
         new_dc[0][i] = new_val
 
@@ -87,21 +90,22 @@ def process_audio_librosa():
 
     # reconstruct signal with embedded watermark
     reconstructed_signal = pywt.idwt(approx_coeffs, new_dc, 'db2')
-    print(f'{reconstructed_signal}')
+    print(f'Reconstructed signal: {reconstructed_signal}')
     output_file_name = 'output_files/wt_bit' + str(embed_bit) + '_embedding.wav'
-    # TODO: solve this error so that embedding still works:
-    soundfile.write(output_file_name, reconstructed_signal, sample_rate)
+    soundfile.write(output_file_name, reconstructed_signal.T, sample_rate, subtype='PCM_32')
 
 
-def extract_watermark_librosa():
+def detect_with_dwt():
     print(f'\n\nEXTRACTION USING MARKED FILE ---> EMBED_BIT={embed_bit}\n--------------------------')
     input_file_name = 'output_files/wt_bit' + str(embed_bit) + '_embedding.wav'
     marked_audio_file = input_file_name
-    m_signal_data, m_sample_rate = lro.load(marked_audio_file, mono=False, sr=None)
+    m_signal_data, m_sample_rate = soundfile.read(marked_audio_file)
+    # dtype=np.float32 is also an option
+    #m_signal_data, m_sample_rate = lro.load(marked_audio_file, mono=False, sr=None)
     # print(f'Signal data: {m_signal_data}')
     # print(f'Sample rate: {m_sample_rate}')
 
-    approx_coeffs, detail_coeffs = pywt.dwt(m_signal_data, 'db2')
+    approx_coeffs, detail_coeffs = pywt.dwt(m_signal_data.T, 'db2')
 
     print(f'Detail_coefficients for channel 1: \n{detail_coeffs[0]}')
 
@@ -114,9 +118,8 @@ def extract_watermark_librosa():
 
     print(f'Extracted message:\n (First 64 bits): {extracted_message[:64]}, (last 64 bits): {extracted_message[-64:]}')
 
-
-process_audio_librosa()
-extract_watermark_librosa()
+embed_with_dwt()
+detect_with_dwt()
 
 
 def read_audio_data2(file_path):

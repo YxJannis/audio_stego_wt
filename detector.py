@@ -7,22 +7,22 @@ class Detector:
     Extract potential messages from sound file
     """
 
-    def __init__(self, audio_file: AudioFile, wavelet_type: str = "db2", embed_bit: int = 10):
+    def __init__(self, filepath: str, wavelet_type: str = "db2", embed_bit: int = 10):
         """
         Initialize detector object
-        :param audio_file: path to input audio file
+        :param filepath: Path to input audio file.
         :param wavelet_type: Type of mother wavelet. Default = 'db2'.
         :param embed_bit: Position of bit in 32 bit floating point number where to detect message bits in coefficient.
         """
-        self.audio_file = audio_file
+        self.audio_file = AudioFile(filepath)
         self.wavelet_type = wavelet_type
         self.embed_bit = embed_bit
+        self.detected_message = None
         self.detect()
 
     def detect(self):
         """
-        Extract message from bits at position embed_bit of each coefficient
-        :return: Extracted message
+        Extract message from bits at position embed_bit of each coefficient.
         """
         print(f'\n\nEXTRACTION USING MARKED FILE ---> EMBED_BIT={self.embed_bit}\n--------------------------')
 
@@ -37,4 +37,4 @@ class Detector:
 
         print(f'Extracted message:\n (First 64 bits): {extracted_message[:64]},'
               f' (last 64 bits): {extracted_message[-64:]}')
-        return extracted_message
+        self.detected_message = extracted_message

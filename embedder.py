@@ -8,20 +8,21 @@ class Embedder:
     Embed messages in wavelet (transform) domain.
     """
 
-    def __init__(self, audio_file: AudioFile, wavelet_type: str = "db2", msg: str = None, embed_bit: int = 10,
+    def __init__(self, filepath: str, wavelet_type: str = "db2", msg: str = None, embed_bit: int = 10,
                  output_file_name: str = None):
         """
         Initialize Embedder.
-        :param audio_file: Valid :py:class: `audio_file` object.
+        :param filepath: Path to audio file.
         :param wavelet_type: Type of mother wavelet. Default = 'db2'.
-        :param msg: Message as bitstring. Default = randomly generated bitstring.
+        :param msg: Message as bitstring. If shorter than embedding capacity, gets concatenated with 0s.
+                    Default = randomly generated bitstring.
         :param embed_bit: Position of bit in 32 bit floating point number where to embed message bits in coefficient.
         :param output_file_name: File name of embedded file.
         """
         self.wavelet_type = wavelet_type
-        self.audio_file = audio_file
+        self.cover_audio_file = AudioFile(filepath)
         self.embed_bit = embed_bit
-        self.max_message_length = int(self.audio_file.size/2)
+        self.max_message_length = int(self.cover_audio_file.size / 2)
 
         if output_file_name is None:
             self.output_file_name = 'output_files/wt_bit' + str(self.embed_bit) + '_embedding.wav'
@@ -30,14 +31,14 @@ class Embedder:
 
         # message size handling
         if msg is None:
-            self.message = AudioFile.generate_random_message(self.max_message_length)
+            self.message = AudioFile.generate_random_message(self.max_message_length+1)
         else:
             if len(msg) > self.max_message_length:
-                print("Message (in bits) can not be longer than " + str(self.max_message_length) +
-                      ". Generating file with random message using maximal length.")
-                self.message = AudioFile.generate_random_message(self.max_message_length)
+                print(f'Message (in bits) can not be longer than {self.max_message_length+1}. '
+                      f'Generating file with random message using maximal length.')
+                self.message = AudioFile.generate_random_message(self.max_message_length+1)
             else:
-                self.message = msg.zfill(self.max_message_length)
+                self.message = msg.zfill(self.max_message_length+1)
 
         self.approx_coeffs = None
         self.detail_coeffs = None
@@ -55,7 +56,7 @@ class Embedder:
         """
         print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> EMBED_BIT={self.embed_bit}\n--------------------------')
         # dwt on audio_file, transpose signal data due to soundfile.read array shape
-        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, self.wavelet_type)
+        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.cover_audio_file.signal_data.T, self.wavelet_type)
         self.marked_detail_coeffs = self.detail_coeffs
         print(f'Detail coefficients for channel 1: \n{self.detail_coeffs[0]}')
         print(f'Embedded message:\n (First 64 bits): {self.message[:64]}, (last 64 bits): {self.message[-64:]}')
@@ -80,14 +81,16 @@ class Embedder:
         Reconstruct audio signal using inverse discrete wavelet transform and write to .wav file.
         :return: Reconstructed AudioFile with message embedded
         """
-        reconstructed_audio = AudioFile(self.output_file_name)
+        reconstructed_audio = AudioFile(self.output_file_name, sampling_rate=self.cover_audio_file.sampling_rate,
+                                        read=False)
         reconstructed_audio.signal_data = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs, self.wavelet_type)
         reconstructed_audio.write_file(transpose=True)
         return reconstructed_audio
 
 
 if __name__ == '__main__':
-    sa_chen_promenade = AudioFile('input_files/SaChenPromenade1.wav')
-    Embedder(sa_chen_promenade)
-    marked_sa_chen_promenade = AudioFile('output_files/output_files/wt_bit' + str(23) + '_embedding.wav')
-    Detector(marked_sa_chen_promenade)
+    em_bit = 20
+    e = Embedder(f'input_files/SaChenPromenade1.wav', output_file_name=f'output_files/wt_bit{em_bit}_embedding.wav',
+                 embed_bit=em_bit)
+    d = Detector(f'output_files/wt_bit{em_bit}_embedding.wav', embed_bit=em_bit)
+    print(f'Error Rate: {AudioFile.check_error_rate(e.message, d.detected_message)}')

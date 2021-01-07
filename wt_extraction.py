@@ -226,6 +226,9 @@ def plot_wt():
     plt.show()
 
 
+plot_wt()
+
+
 def plot_fft(audio_file):
     rate, aud_data = wavfile.read(audio_file)
 

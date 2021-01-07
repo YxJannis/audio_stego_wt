@@ -41,9 +41,9 @@ class AudioFile:
         :param transpose: True if signal data needs to be transposed (e.g. using soundfile.read and write)
         """
         if transpose:
-            soundfile.write(self.file_path, self.signal_data.T, self.sampling_rate, subtype='PCM_32')
+            soundfile.write(self.file_path, self.signal_data.T, self.sampling_rate, subtype='PCM_16')
         else:
-            soundfile.write(self.file_path, self.signal_data, self.sampling_rate, subtype='PCM_32')
+            soundfile.write(self.file_path, self.signal_data, self.sampling_rate, subtype='PCM_16')
 
     # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
     @staticmethod

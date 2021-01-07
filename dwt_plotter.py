@@ -2,7 +2,7 @@ import pywt
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import numpy as np
-import embedder as emb
+
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 

@@ -17,6 +17,7 @@ class AudioFile:
                      (e.g. for creating and writing files)
         """
         self.file_path = file_path
+        self.write_file_subtype = None
         self.sampling_rate = sampling_rate
         self.signal_data = None
         self.max_message_len = None
@@ -35,15 +36,18 @@ class AudioFile:
         self.size = self.signal_data.shape[0]
         self.max_message_len = self.size / self.sampling_rate
 
-    def write_file(self, transpose: bool = True):
+    def write_file(self, write_file_subtype: str = 'PCM16', transpose: bool = True):
         """
         Write signal data, sampling rate to file path
+        :param write_file_subtype: Subtype for output .wav file.
+        See https://pysoundfile.readthedocs.io/en/latest/#soundfile.available_subtypes for possible values
         :param transpose: True if signal data needs to be transposed (e.g. using soundfile.read and write)
         """
+        self.write_file_subtype = write_file_subtype
         if transpose:
-            soundfile.write(self.file_path, self.signal_data.T, self.sampling_rate, subtype='PCM_16')
+            soundfile.write(self.file_path, self.signal_data.T, self.sampling_rate, subtype=write_file_subtype)
         else:
-            soundfile.write(self.file_path, self.signal_data, self.sampling_rate, subtype='PCM_16')
+            soundfile.write(self.file_path, self.signal_data, self.sampling_rate, subtype=write_file_subtype)
 
     # https://stackoverflow.com/questions/16444726/binary-representation-of-float-in-python-bits-not-hex
     @staticmethod

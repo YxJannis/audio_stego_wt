@@ -9,7 +9,7 @@ class Embedder:
     """
 
     def __init__(self, filepath: str, wavelet_type: str = "db2", msg: str = None, embed_bit: int = 10,
-                 output_file_name: str = None):
+                 output_file_name: str = None, write_file_subtype: str = "PCM_16"):
         """
         Initialize Embedder.
         :param filepath: Path to audio file.
@@ -23,6 +23,7 @@ class Embedder:
         self.cover_audio_file = AudioFile(filepath)
         self.embed_bit = embed_bit
         self.max_message_length = int(self.cover_audio_file.size / 2)
+        self.write_file_subtype = write_file_subtype
 
         if output_file_name is None:
             self.output_file_name = 'output_files/wt_bit' + str(self.embed_bit) + '_embedding.wav'
@@ -87,7 +88,7 @@ class Embedder:
         reconstructed_audio = AudioFile(self.output_file_name, sampling_rate=self.cover_audio_file.sampling_rate,
                                         read=False)
         reconstructed_audio.signal_data = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs, self.wavelet_type)
-        reconstructed_audio.write_file(transpose=True)
+        reconstructed_audio.write_file(transpose=True, write_file_subtype=self.write_file_subtype)
         return reconstructed_audio
 
 

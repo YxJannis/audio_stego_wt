@@ -1,0 +1,5 @@
+embed_bit,wavelet,subtype,error_rate,audible
+1,db2,PCM_16,0.49930704486051997, 
+1,db2,PCM_32,0.4964715176036088, 
+2,db2,PCM_16,0.4994564660272445, 
+2,db2,PCM_32,0.4996047288903509, 

@@ -39,8 +39,8 @@ class AudioFile:
     def write_file(self, write_file_subtype: str = 'PCM16', transpose: bool = True):
         """
         Write signal data, sampling rate to file path
-        :param write_file_subtype: Subtype for output .wav file.
-        See https://pysoundfile.readthedocs.io/en/latest/#soundfile.available_subtypes for possible values
+        :param write_file_subtype: Subtype for output .wav file. Subtypes can impact the size of the output file.
+        See https://pysoundfile.readthedocs.io/en/latest/#soundfile.available_subtypes for possible values.
         :param transpose: True if signal data needs to be transposed (e.g. using soundfile.read and write)
         """
         self.write_file_subtype = write_file_subtype

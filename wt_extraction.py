@@ -193,7 +193,7 @@ def do():
 
 
 # calling the plot functions
-dwtp.plot_wt(audio_file_promenade_1)
+
 # dwtp.test()
 
 # do()

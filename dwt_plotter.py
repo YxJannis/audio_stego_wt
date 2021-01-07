@@ -1,12 +1,10 @@
 import pywt
 from scipy.io import wavfile
-from scipy.fftpack import fft
 import matplotlib.pyplot as plt
 import numpy as np
-import random
-import librosa as lro
-import soundfile
-import struct
+import embedder as emb
+
+audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 
 
 def plot_dwt(time, approx_coeffs, detail_coeffs):
@@ -20,7 +18,6 @@ def plot_dwt(time, approx_coeffs, detail_coeffs):
 
 
 def plot_wt(audio_file):
-
     sampling_frequency, data = wavfile.read(audio_file)
 
     print(f"number of channels = {data.shape[1]}")
@@ -35,7 +32,6 @@ def plot_wt(audio_file):
     ax1.legend()
     ax1.set_xlabel("Time [s]")
     ax1.set_ylabel("Amplitude")
-
 
     #
     scales = (1, len(data))
@@ -53,7 +49,7 @@ def plot_wt(audio_file):
     plt.show()
 
 
-def test(): #TODO Chunk, skipped.
+def test():  # TODO Chunk, skipped.
     wav_fname = 'input_files/file_example_WAV_2MG.wav'
 
     samplerate, data = wavfile.read(wav_fname)
@@ -63,8 +59,6 @@ def test(): #TODO Chunk, skipped.
     length = data.shape[0] / samplerate
     print(f"length = {length}s")
 
-    import matplotlib.pyplot as plt
-    import numpy as np
     time = np.linspace(0., length, data.shape[0])
     plt.plot(time, data[:, 0], label="Left channel")
     plt.plot(time, data[:, 1], label="Right channel")
@@ -72,3 +66,13 @@ def test(): #TODO Chunk, skipped.
     plt.xlabel("Time [s]")
     plt.ylabel("Amplitude")
     plt.show()
+
+
+if __name__ == '__main__':
+    plot_wt(audio_file_promenade_1)
+
+    """em_bit = 20
+    e = emb.Embedder("input_files/SaChenPromenade1.wav")
+    length = e.cover_audio_file.signal_data[0]/e.cover_audio_file.sampling_rate
+    time = np.linspace(0., length, e.cover_audio_file.signal_data.shape[0])
+    plot_dwt(time , e.approx_coeffs, e.detail_coeffs)"""

@@ -1,8 +1,8 @@
 import pywt
+from matplotlib.ticker import NullFormatter
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import numpy as np
-
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 
@@ -23,46 +23,30 @@ def plot_wt(audio_file):
     print(f"number of channels = {data.shape[1]}")
     length = data.shape[0] / sampling_frequency
     print(f"length = {length}s")
-
-    fig1, ax1 = plt.subplots()
-
     time = np.linspace(0., length, data.shape[0])
-    ax1.plot(time, data[:, 0], label="Left channel")
-    ax1.plot(time, data[:, 1], label="Right channel")
-    ax1.legend()
-    ax1.set_xlabel("Time [s]")
-    ax1.set_ylabel("Amplitude")
 
-    #
-    scales = (1, len(data))
+    plt.figure()
+    plt.subplot(2, 1, 1)
+
+    plt.plot(time, data[:, 0], label="Left channel")
+    plt.plot(time, data[:, 1], label="Right channel")
+    plt.title("Stereo")
+    plt.legend()
+
     approx_coeffs, detail_coeffs = pywt.dwt(data, 'db3')
 
-    print(approx_coeffs)
-    print(detail_coeffs)
-
-    plt.figure(2)
+    plt.subplot(2, 1, 2)
     plt.plot(time, approx_coeffs, label="Approx. Coeffs")
     plt.plot(time, detail_coeffs, label="Detail. Coeffs")
     plt.legend()
-    plt.xlabel("Time [s]")
-    plt.ylabel("Amplitude")
+    plt.title("coeffs")
+
     plt.show()
 
 
-def test():  # TODO Chunk, skipped.
-    wav_fname = 'input_files/file_example_WAV_2MG.wav'
-
-    samplerate, data = wavfile.read(wav_fname)
-    wavfile.write("testout.wav", samplerate, data.astype('int16'))
-    print(f"number of channels = {data.shape[1]}")
-
-    length = data.shape[0] / samplerate
-    print(f"length = {length}s")
-
-    time = np.linspace(0., length, data.shape[0])
-    plt.plot(time, data[:, 0], label="Left channel")
-    plt.plot(time, data[:, 1], label="Right channel")
-    plt.legend()
+def plot_diff(difference_array):
+    plt.figure()
+    plt.plot(difference_array)
     plt.xlabel("Time [s]")
     plt.ylabel("Amplitude")
     plt.show()
@@ -70,6 +54,8 @@ def test():  # TODO Chunk, skipped.
 
 if __name__ == '__main__':
     plot_wt(audio_file_promenade_1)
+    a = [0.98, -0.98, 0.05, -0.05, 0.42, -0.42]
+    plot_diff(a)
 
     """em_bit = 20
     e = emb.Embedder("input_files/SaChenPromenade1.wav")

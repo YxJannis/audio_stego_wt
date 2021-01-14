@@ -34,11 +34,14 @@ class Embedder:
         if msg is None:
             self.message = AudioFile.generate_random_message(self.max_message_length+1)
         else:
-            if len(msg) > self.max_message_length:
-                print(f'Message (in bits) can not be longer than {self.max_message_length+1}. '
-                      f'Generating file with random message using maximal length.')
-                self.message = AudioFile.generate_random_message(self.max_message_length+1)
+            if len(msg) > self.max_message_length+1:
+                print(f'Message too long, will be cut off eventually.')
+                self.message = msg
+                #print(f'Message (in bits) can not be longer than {self.max_message_length+1}. '
+                #      f'Generating file with random message using maximal length.')
+                #self.message = AudioFile.generate_random_message(self.max_message_length+1)
             else:
+                print(f'Message too short, will be filled with 0s to lenght {self.max_message_length+1}.')
                 self.message = msg.zfill(self.max_message_length+1)
 
         self.approx_coeffs = None

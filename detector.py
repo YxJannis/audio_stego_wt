@@ -17,6 +17,8 @@ class Detector:
         self.audio_file = AudioFile(filepath)
         self.wavelet_type = wavelet_type
         self.embed_bit = embed_bit
+        self.detail_coeffs = None
+        self.approx_coeffs = None
         self.detected_message = None
         self.detect()
 
@@ -26,12 +28,12 @@ class Detector:
         """
         print(f'\n\nEXTRACTION USING MARKED FILE ---> EMBED_BIT={self.embed_bit}\n--------------------------')
 
-        approx_coeffs, detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, 'db2')
-        print(f'Detail_coefficients for channel 1: \n{detail_coeffs[0]}')
+        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, 'db2')
+        print(f'Detail_coefficients for channel 1: \n{self.detail_coeffs[0]}')
 
         extracted_message = ""
-        for i in range(len(detail_coeffs[0])):
-            val = detail_coeffs[0][i]
+        for i in range(len(self.detail_coeffs[0])):
+            val = self.detail_coeffs[0][i]
             bin_val_list = list(AudioFile.float2bin(val))
             extracted_message = extracted_message + str(bin_val_list[self.embed_bit])
 

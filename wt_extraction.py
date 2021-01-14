@@ -1,13 +1,11 @@
 import pywt
 from scipy.io import wavfile
-from scipy.fftpack import fft
-import matplotlib.pyplot as plt
 import numpy as np
 import random
 import librosa as lro
 import soundfile
 import struct
-import dwt_plotter as dwtp
+
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 
@@ -191,9 +189,5 @@ def do():
     new_dc = embed_message(dc)
     reconstruct_audio(ac, new_dc, wavelet_type, sampling_freq)
 
-
-# calling the plot functions
-dwtp.plot_wt(audio_file_promenade_1)
-# dwtp.test()
 
 # do()

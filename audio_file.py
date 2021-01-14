@@ -36,7 +36,7 @@ class AudioFile:
         self.size = self.signal_data.shape[0]
         self.max_message_len = self.size / self.sampling_rate
 
-    def write_file(self, write_file_subtype: str = 'PCM16', transpose: bool = True):
+    def write_file(self, write_file_subtype: str = 'PCM_16', transpose: bool = True):
         """
         Write signal data, sampling rate to file path
         :param write_file_subtype: Subtype for output .wav file. Subtypes can impact the size of the output file.

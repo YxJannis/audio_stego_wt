@@ -33,23 +33,22 @@ class Statistics:
         """
         with open(self.output_file, mode='w') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', )
-            for data_set in self.full_data:
-                csv_writer.writerow(data_set)
+            csv_writer.writerows(self.full_data)
         print(f'Writing completed.')
 
 
 if __name__ == '__main__':
     input_f = 'input_files/SaChenPromenade1.wav'
     s = Statistics('statistics/statistics.csv')
-    for i in range(1, 3):
+    for i in range(10, 31):
         em_bit = i
-        e = Embedder(input_f, output_file_name=f'output_files/wt_bit{em_bit}_embedding.wav',
-                     embed_bit=em_bit)
-        d = Detector(f'output_files/wt_bit{em_bit}_embedding.wav', embed_bit=em_bit)
-        s.process(e, d)
+        # = Embedder(input_f, output_file_name=f'output_files/wt_bit{em_bit}_embedding_PCM16.wav',
+        #             embed_bit=em_bit)
+        #d = Detector(f'output_files/wt_bit{em_bit}_embedding_PCM16.wav', embed_bit=em_bit)
+        #s.process(e, d)
 
-        e = Embedder(input_f, output_file_name=f'output_files/wt_bit{em_bit}_embedding.wav',
+        e = Embedder(input_f, output_file_name=f'output_files/wt_bit{em_bit}_embedding_PCM32.wav',
                      embed_bit=em_bit, write_file_subtype="PCM_32")
-        d = Detector(f'output_files/wt_bit{em_bit}_embedding.wav', embed_bit=em_bit)
-        s.process(e, d)
-    s.write_csv()
+        #d = Detector(f'output_files/wt_bit{em_bit}_embedding.wav', embed_bit=em_bit)
+        #s.process(e, d)
+    #s.write_csv()

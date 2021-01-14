@@ -93,8 +93,10 @@ class Embedder:
 
 
 if __name__ == '__main__':
-    em_bit = 20
+    em_bit = 12
     e = Embedder(f'input_files/SaChenPromenade1.wav', output_file_name=f'output_files/wt_bit{em_bit}_embedding.wav',
                  embed_bit=em_bit)
     d = Detector(f'output_files/wt_bit{em_bit}_embedding.wav', embed_bit=em_bit)
     print(f'Error Rate: {AudioFile.check_error_rate(e.message, d.detected_message)}')
+
+

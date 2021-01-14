@@ -52,6 +52,6 @@ print(f'Difference between original and embedded detail coeffs:\n{diff_og_emb}')
 print(f'Difference between original and detected detail coeffs:\n{diff_og_det}')
 print(f'Difference between embedded and detected detail coeffs:\n{diff_emb_det}')
 
-dwt_plotter.plot_diff(diff_og_emb)
+#dwt_plotter.plot_diff(diff_og_emb)
 dwt_plotter.plot_diff(diff_og_det)
-dwt_plotter.plot_diff(diff_emb_det)
+#dwt_plotter.plot_diff(diff_emb_det)

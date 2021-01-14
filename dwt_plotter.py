@@ -1,5 +1,4 @@
 import pywt
-from matplotlib.ticker import NullFormatter
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import numpy as np
@@ -47,8 +46,7 @@ def plot_wt(audio_file):
 def plot_diff(difference_array):
     plt.figure()
     plt.plot(difference_array)
-    plt.xlabel("Time [s]")
-    plt.ylabel("Amplitude")
+    plt.xticks([1, 500000, 1000000, len(difference_array)], [10, 500000, 1000000, len(difference_array)])
     plt.show()
 
 

@@ -81,7 +81,7 @@ class Embedder:
         print(f'Detail coefficients of channel 1 after embedding: \n{self.marked_detail_coeffs[0]}\n')
 
     def multilevel_decomposition(self):
-        data = pywt.wavedec(self.cover_audio_file.signal_data.T, self.wavelet_type)
+        data = pywt.wavedec(self.cover_audio_file.signal_data.T, wavelet=self.wavelet_type, level=2)
 
     def reconstruct_and_write(self):
         """

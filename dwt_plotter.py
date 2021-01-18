@@ -2,6 +2,7 @@ import pywt
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import numpy as np
+import argparse
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 
@@ -40,20 +41,42 @@ def plot_wt(audio_file):
     plt.legend()
     plt.title("coeffs")
 
-    plt.show()
+    return plt
+    # plt.show()
 
 
 def plot_diff(difference_array):
     plt.figure()
     plt.plot(difference_array)
     plt.xticks([1, 500000, 1000000, len(difference_array)], [10, 500000, 1000000, len(difference_array)])
-    plt.show()
+    return plt
+    # plt.show()
+
+
+def plot_master(audio_file, difference_array):
+    parser = argparse.ArgumentParser(description='Enter the wanted plots.')
+    parser.add_argument('-s', '--stereo', help='Request the stereo plot', default='check_string_for_empty', required=False)
+    parser.add_argument('-d', '--difference', help="Request the difference plot", default='check_string_for_empty_', required=False)
+    args = parser.parse_args()
+
+    if args.stereo:
+        print("Stereo plot creating...")
+        ax = plot_wt(audio_file)
+        ax.savefig('plot_images/stereo_plot.png')
+        ax.show()
+
+    if args.difference:
+        print("Difference plot creating...")
+        ay = plot_diff(difference_array)
+        ay.savefig('plot_images/difference_plot.png')
+        ay.show()
 
 
 if __name__ == '__main__':
-    plot_wt(audio_file_promenade_1)
+    # plot_wt(audio_file_promenade_1)
     a = [0.98, -0.98, 0.05, -0.05, 0.42, -0.42]
-    plot_diff(a)
+    # plot_diff(a)
+    plot_master(audio_file_promenade_1, a)
 
     """em_bit = 20
     e = emb.Embedder("input_files/SaChenPromenade1.wav")

@@ -7,7 +7,7 @@ import dwt_plotter
 # embedding bit is most robust & least audible
 
 input_f = 'input_files/SaChenPromenade1.wav'
-em_bit = 9
+em_bit = 12
 message = ''.ljust(1726662+1, '1')      # message to be embedded (here: just 1s)
 
 # instantiate embedder who automatically creates output-file with output_file_name with message embedded (in channel 1)
@@ -52,6 +52,8 @@ print(f'Difference between original and embedded detail coeffs:\n{diff_og_emb}')
 print(f'Difference between original and detected detail coeffs:\n{diff_og_det}')
 print(f'Difference between embedded and detected detail coeffs:\n{diff_emb_det}')
 
-dwt_plotter.plot_diff(diff_og_emb)
+
+dwt_plotter.plot_master(input_f, diff_og_emb)
+#dwt_plotter.plot_diff(diff_og_emb)
 #dwt_plotter.plot_diff(diff_og_det)
 #dwt_plotter.plot_diff(diff_emb_det)

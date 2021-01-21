@@ -145,6 +145,7 @@ def plot_master_2(emb: Embedder, det: Detector):
     axs[2][1].set_title('Detail coeff. diff. original vs. modified')
 
     plt.subplots_adjust(top=0.9, bottom=0.1)
+    plt.tight_layout()
     plt.show()
 
 

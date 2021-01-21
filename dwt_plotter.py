@@ -24,10 +24,10 @@ def plot_wt(audio_file, ax=None):
     print(f"length = {length}s")
     time = np.linspace(0., length, data.shape[0])
 
-    plt.plot(time, data[:, 0], label="Left channel")
-    plt.plot(time, data[:, 1], label="Right channel")
-    plt.title("Stereo")
-    plt.legend()
+    plt.plot(time, data.T[0], label="Left channel")
+    #plt.plot(time, data[:, 1], label="Right channel")
+    plt.title("Audio Data (left channel)")
+    #plt.legend()
 
     return plt
 
@@ -41,19 +41,20 @@ def plot_coeff(audio_file, ax=None):
     print(f"length = {length}s")
     time = np.linspace(0., length, data.shape[0])
 
-    approx_coeffs, detail_coeffs = pywt.dwt(data, 'db3')
+    approx_coeffs, detail_coeffs = pywt.dwt(data, 'db2')
 
-    plt.plot(time, approx_coeffs, label="Approx. Coeffs")
-    plt.plot(time, detail_coeffs, label="Detail. Coeffs")
-    plt.legend()
-    plt.title("coeffs")
+    #plt.plot(time, approx_coeffs, label="Approx. Coeffs")
+    plt.plot(time, detail_coeffs.T[0], label="Detail. Coeffs")
+    #plt.legend()
+    plt.title("Detail coefficients (left channel)")
 
     return plt
 
 
 def plot_diff(difference_array, ax=None):
+    plt.title("Difference (original vs. embedded)")
     plt.plot(difference_array)
-    plt.xticks([1, 500000, 1000000, len(difference_array)], [10, 500000, 1000000, len(difference_array)])
+    #plt.xticks([1, 500000, 1000000, len(difference_array)], [10, 500000, 1000000, len(difference_array)])
     return plt
 
 
@@ -69,7 +70,7 @@ def plot_master(audio_file, difference_array):
 
     num = 0
 
-    fig, (ax1, ax2, ax3) = plt.subplots(3)
+    fig, [ax1, ax2, ax3] = plt.subplots(3)
 
     if args.stereo:
         num += 1
@@ -89,6 +90,7 @@ def plot_master(audio_file, difference_array):
         print("Coeffs plot creating...")
         plot_coeff(audio_file, ax3)
 
+    fig.tight_layout()
     plt.savefig('plot_images/plot.png')
     plt.show()
 

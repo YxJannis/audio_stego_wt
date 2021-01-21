@@ -119,13 +119,13 @@ def plot_master_2(emb: Embedder, det: Detector):
     axs[0][0].plot(og_signal_data)
     axs[0][0].set_title('Audio data (unmodified)')
 
-    axs[0][1].plot(emb_signal_data, 'tab:orange')
-    axs[0][1].set_title('Audio data (modified)')
+    axs[1][0].plot(emb_signal_data, 'tab:orange')
+    axs[1][0].set_title('Audio data (modified)')
 
     # plot detail coeffs
     #axs[1][0].plot(time, og_detail_coeffs)
-    axs[1][0].plot(og_detail_coeffs)
-    axs[1][0].set_title('Detail coefficients (unmodified)')
+    axs[0][1].plot(og_detail_coeffs)
+    axs[0][1].set_title('Detail coefficients (unmodified)')
 
     # axs[1][1].plot(time, emb_detail_coeffs)
     axs[1][1].plot(emb_detail_coeffs, 'tab:orange')
@@ -133,11 +133,11 @@ def plot_master_2(emb: Embedder, det: Detector):
 
     # plot difference
 
-    diff_sig_og_emb = abs(og_signal_data-emb_signal_data)
+    diff_sig_og_emb = abs(og_signal_data)- abs(emb_signal_data)
 
-    diff_coeff_og_emb = abs(og_detail_coeffs - emb_detail_coeffs)
-    diff_coeff_og_det = abs(og_detail_coeffs - det_detail_coeffs)
-    diff_coeff_emb_det = abs(emb_detail_coeffs - det_detail_coeffs)
+    diff_coeff_og_emb = abs(og_detail_coeffs) - abs(emb_detail_coeffs)
+    diff_coeff_og_det = abs(og_detail_coeffs) - abs(det_detail_coeffs)
+    diff_coeff_emb_det = abs(emb_detail_coeffs) - abs(det_detail_coeffs)
     axs[2][0].plot(diff_sig_og_emb, 'tab:red')
     axs[2][0].set_title('Signal diff. original vs. modified')
 

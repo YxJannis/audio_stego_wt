@@ -11,22 +11,16 @@ def multilevel_decomposition(level):
     return data
 
 
-def check_levels():
-    for i in range(1, 6):
-        data = multilevel_decomposition(i)
-        print(f'\n\n-+-+-+-+-+-+-+-+-+-+-+-+-+\nDecomposition for level {i}:\n\n')
-        for j in range(i):
-            print(f'Detail coeffs array size: {len(data[j+1][0])}')
-            print(f'Detail coeffs at level {i - j}: {data[j+1][0]}')
+def print_coeffs(level):
+    data = multilevel_decomposition(level)
+    print(f'\n\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+'
+          f'\nDecomposition for level {level}:\n\n')
+    print(f'Approximation coefficients:\n {data[0][0]}\n\n')
+    print(f'Detail coefficients:\n')
+    for j in range(level):
+        print(f'Level {level-j}:')
+        print(f'Array size: {len(data[j + 1][0])}')
+        print(f'{data[j + 1][0]}\n')
 
 
-def print_coeffs():
-    data = multilevel_decomposition(3)
-    print(f'{data}')
-    print(f'\n-----------\n{data[0][0]}')
-    print(f'\n-----------\n{data[1][0]}')
-    print(f'\n-----------\n{data[2][0]}')
-    print(f'\n-----------\n{data[3][0]}')
-
-
-check_levels()
+print_coeffs(6)

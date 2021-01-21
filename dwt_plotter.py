@@ -2,6 +2,8 @@ import pywt
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
 import numpy as np
+from embedder import Embedder
+from detector import Detector
 import argparse
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
@@ -95,14 +97,61 @@ def plot_master(audio_file, difference_array):
     plt.show()
 
 
-if __name__ == '__main__':
-    # plot_wt(audio_file_promenade_1)
-    a = [0.98, -0.98, 0.05, -0.05, 0.42, -0.42]
-    # plot_diff(a)
-    plot_master(audio_file_promenade_1, a)
+def plot_master_2(emb: Embedder, det: Detector):
+    og_signal_data = emb.cover_audio_file.signal_data.T[0]        #[0] for channel 1
+    emb_signal_data = emb.reconstructed_audio.signal_data[0]
 
-    """em_bit = 20
-    e = emb.Embedder("input_files/SaChenPromenade1.wav")
-    length = e.cover_audio_file.signal_data[0]/e.cover_audio_file.sampling_rate
-    time = np.linspace(0., length, e.cover_audio_file.signal_data.shape[0])
-    plot_dwt(time , e.approx_coeffs, e.detail_coeffs)"""
+    wavelet_type = emb.wavelet_type
+    embed_bit = emb.embed_bit
+    sampling_freq = emb.cover_audio_file.sampling_rate
+
+    og_detail_coeffs = emb.detail_coeffs[0]
+    emb_detail_coeffs = emb.marked_detail_coeffs[0]
+    det_detail_coeffs = det.detail_coeffs[0]
+
+    fig, axs = plt.subplots(3, 2)
+    fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}')
+
+    # plot original audio data
+    length = og_signal_data.shape[0] / sampling_freq
+    time = np.linspace(0., length, og_signal_data.shape[0])
+    #axs[0][0].plot(time, og_signal_data.T[0])
+    axs[0][0].plot(og_signal_data)
+    axs[0][0].set_title('Audio data (unmodified)')
+
+    axs[0][1].plot(emb_signal_data, 'tab:orange')
+    axs[0][1].set_title('Audio data (modified)')
+
+    # plot detail coeffs
+    #axs[1][0].plot(time, og_detail_coeffs)
+    axs[1][0].plot(og_detail_coeffs)
+    axs[1][0].set_title('Detail coefficients (unmodified)')
+
+    # axs[1][1].plot(time, emb_detail_coeffs)
+    axs[1][1].plot(emb_detail_coeffs, 'tab:orange')
+    axs[1][1].set_title('Detail coefficients (modified)')
+
+    # plot difference
+
+    diff_sig_og_emb = abs(og_signal_data-emb_signal_data)
+
+    diff_coeff_og_emb = abs(og_detail_coeffs - emb_detail_coeffs)
+    diff_coeff_og_det = abs(og_detail_coeffs - det_detail_coeffs)
+    diff_coeff_emb_det = abs(emb_detail_coeffs - det_detail_coeffs)
+    axs[2][0].plot(diff_sig_og_emb, 'tab:red')
+    axs[2][0].set_title('Signal diff. original vs. modified')
+
+    axs[2][1].plot(diff_coeff_og_emb, 'tab:red')
+    axs[2][1].set_title('Detail coeff. diff. original vs. modified')
+
+    plt.subplots_adjust(top=0.9, bottom=0.1)
+    plt.show()
+
+
+
+#if __name__ == '__main__':
+    # plot_wt(audio_file_promenade_1)
+    #a = [0.98, -0.98, 0.05, -0.05, 0.42, -0.42]
+    # plot_diff(a)
+    #plot_master(audio_file_promenade_1, a)
+

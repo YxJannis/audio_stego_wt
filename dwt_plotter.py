@@ -4,18 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from embedder import Embedder
 from detector import Detector
+from statistics import Statistics
 import argparse
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
-
-"""def plot_dwt(time, approx_coeffs, detail_coeffs):
-    plt.figure(1)
-    plt.plot(time, approx_coeffs[:, 0], label="Approx. Coeffs")
-    plt.plot(time, detail_coeffs[:, 1], label="Detail. Coeffs")
-    plt.legend()
-    plt.xlabel("Time [s]")
-    plt.ylabel("Amplitude")
-    plt.show()"""
 
 
 def plot_wt(audio_file, ax=None):
@@ -97,7 +89,7 @@ def plot_master(audio_file, difference_array):
     plt.show()
 
 
-def plot_master_2(emb: Embedder, det: Detector):
+def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     og_signal_data = emb.cover_audio_file.signal_data.T[0]        #[0] for channel 1
     emb_signal_data = emb.reconstructed_audio.signal_data[0]
 
@@ -123,30 +115,28 @@ def plot_master_2(emb: Embedder, det: Detector):
     axs[1][0].set_title('Audio data (modified)')
 
     # plot detail coeffs
-    #axs[1][0].plot(time, og_detail_coeffs)
     axs[0][1].plot(og_detail_coeffs)
     axs[0][1].set_title('Detail coefficients (unmodified)')
 
-    # axs[1][1].plot(time, emb_detail_coeffs)
     axs[1][1].plot(emb_detail_coeffs, 'tab:orange')
     axs[1][1].set_title('Detail coefficients (modified)')
 
-    # plot difference
 
-    diff_sig_og_emb = abs(og_signal_data)- abs(emb_signal_data)
+    # plot differences
+    diff_sig_og_emb = og_signal_data - emb_signal_data
 
-    diff_coeff_og_emb = abs(og_detail_coeffs) - abs(emb_detail_coeffs)
-    diff_coeff_og_det = abs(og_detail_coeffs) - abs(det_detail_coeffs)
-    diff_coeff_emb_det = abs(emb_detail_coeffs) - abs(det_detail_coeffs)
+    diff_coeff_og_emb = og_detail_coeffs - emb_detail_coeffs
+    diff_coeff_og_det = og_detail_coeffs - det_detail_coeffs
+    diff_coeff_emb_det = emb_detail_coeffs - det_detail_coeffs
     axs[2][0].plot(diff_sig_og_emb, 'tab:red')
     axs[2][0].set_title('Signal diff. original vs. modified')
 
     axs[2][1].plot(diff_coeff_og_emb, 'tab:red')
-    axs[2][1].set_title('Detail coeff. diff. original vs. modified')
+    axs[2][1].set_title('Dcoeff diff. original vs. modified')
 
     plt.subplots_adjust(top=0.9, bottom=0.1)
     plt.tight_layout()
-    plt.savefig('plot_images/plot.png')
+    plt.savefig(f'plot_images/{file_title}_{wavelet_type}_{embed_bit}.png')
     plt.show()
 
 

@@ -38,12 +38,11 @@ class Embedder:
             if len(msg) > self.max_message_length+1:
                 print(f'Message too long, will be cut off eventually.')
                 self.message = msg
-                #print(f'Message (in bits) can not be longer than {self.max_message_length+1}. '
-                #      f'Generating file with random message using maximal length.')
-                #self.message = AudioFile.generate_random_message(self.max_message_length+1)
-            else:
-                print(f'Message too short, will be filled with 0s to lenght {self.max_message_length+1}.')
+            elif len(msg) < self.max_message_length+1:
+                print(f'Message too short, will be padded with 0s to length {self.max_message_length+1}.')
                 self.message = msg.zfill(self.max_message_length+1)
+            else:
+                self.message = msg
 
         self.approx_coeffs = None
         self.detail_coeffs = None
@@ -53,7 +52,7 @@ class Embedder:
 
     def embed(self):
         """
-        Embed message in signal data using discrete wavelet transform.
+        Embed message in signal data using discrete wavelet transform and replacing bits in detail coefficients
         * signal_data: raw data of AudioFile object given in init
         * embed_bit: position of message-bit substitution in detail coefficients
         * wavelet_type: type of mother wavelet for discrete wavelet transform. Defined in init, default 'db2'

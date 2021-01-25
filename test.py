@@ -60,6 +60,7 @@ print(f'Difference between embedded and detected detail coeffs:\n{diff_emb_det}'
         #plot_master2()
         #save error rate
     # plot (error rate)
+    #
 
 dwt_plotter.plot_master_2(e, d)
 

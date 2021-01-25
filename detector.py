@@ -1,5 +1,6 @@
 from audio_file import AudioFile
 import pywt
+# TODO: blind detector?
 
 
 class Detector:

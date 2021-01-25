@@ -24,6 +24,7 @@ class Embedder:
         self.embed_bit = embed_bit
         self.max_message_length = int(self.cover_audio_file.size / 2)
         self.write_file_subtype = write_file_subtype
+        self.reconstructed_audio = None
 
         if output_file_name is None:
             self.output_file_name = 'output_files/wt_bit' + str(self.embed_bit) + '_embedding.wav'
@@ -88,11 +89,12 @@ class Embedder:
         Reconstruct audio signal using inverse discrete wavelet transform and write to .wav file.
         :return: Reconstructed AudioFile with message embedded
         """
-        reconstructed_audio = AudioFile(self.output_file_name, sampling_rate=self.cover_audio_file.sampling_rate,
-                                        read=False)
-        reconstructed_audio.signal_data = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs, self.wavelet_type)
-        reconstructed_audio.write_file(transpose=True, write_file_subtype=self.write_file_subtype)
-        return reconstructed_audio
+        self.reconstructed_audio = AudioFile(self.output_file_name, sampling_rate=self.cover_audio_file.sampling_rate,
+                                             read=False)
+        self.reconstructed_audio.signal_data = pywt.idwt(self.approx_coeffs, self.marked_detail_coeffs,
+                                                         self.wavelet_type)
+        self.reconstructed_audio.write_file(transpose=True, write_file_subtype=self.write_file_subtype)
+        return self.reconstructed_audio
 
 
 if __name__ == '__main__':

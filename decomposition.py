@@ -11,12 +11,17 @@ def multilevel_decomposition(level):
     return data
 
 
-# print coefficients for decomposition of left channel
 def print_coeffs(level):
     data = multilevel_decomposition(level)
-    print(f'{data}')
-    print(f'\n-----------\n{data[0][0]}')
-    print(f'\n-----------\n{data[1][0]}')
-    print(f'\n-----------\n{data[2][0]}')
-    print(f'\n-----------\n{data[3][0]}')
+    print(f'\n\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+'
+          f'\nDecomposition for level {level}:\n\n')
+    print(f'Approximation coefficients:\n {data[0][0]}\n\n')
+    print(f'Detail coefficients:\n')
+    for j in range(level):
+        print(f'Level {level-j}:')
+        print(f'Array size: {len(data[j + 1][0])}')
+        print(f'{data[j + 1][0]}\n')
+
+
+print_coeffs(6)
 

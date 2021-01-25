@@ -53,7 +53,13 @@ print(f'Difference between original and detected detail coeffs:\n{diff_og_det}')
 print(f'Difference between embedded and detected detail coeffs:\n{diff_emb_det}')
 
 
-dwt_plotter.plot_master(input_f, diff_og_emb)
-#dwt_plotter.plot_diff(diff_og_emb)
-#dwt_plotter.plot_diff(diff_og_det)
-#dwt_plotter.plot_diff(diff_emb_det)
+### Try out different wavelet types: https://en.wikipedia.org/wiki/Wavelet#List_of_wavelets
+# TODO: plot error rate over all embed bits for each wavelet
+# for wavelet in wavelet_types():
+    #for embed bit in range(1,30)
+        #plot_master2()
+        #save error rate
+    # plot (error rate)
+
+dwt_plotter.plot_master_2(e, d)
+

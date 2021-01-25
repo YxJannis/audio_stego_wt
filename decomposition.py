@@ -11,26 +11,12 @@ def multilevel_decomposition(level):
     return data
 
 
-def check_levels():
-    for i in range(1, 6):
-        data = multilevel_decomposition(i)
-        print(f'\n\n-+-+-+-+-+-+-+-+-+-+-+-+-+\nDecomposition for level {i}:\n\n')
-        print(f'Coefficients (for channel 1) array size: {len(data[0][0])}')
-        print(f'Detail coeffs at level 1: {data[1][0]}')
-        try:
-            print(f'Detail coeffs at level 2: {data[2][0]}')
-            print(f'Detail coeffs at level 3: {data[3][0]}')
-        except:
-            True
-
-
-def print_coeffs():
-    data = multilevel_decomposition(3)
+# print coefficients for decomposition of left channel
+def print_coeffs(level):
+    data = multilevel_decomposition(level)
     print(f'{data}')
     print(f'\n-----------\n{data[0][0]}')
     print(f'\n-----------\n{data[1][0]}')
     print(f'\n-----------\n{data[2][0]}')
     print(f'\n-----------\n{data[3][0]}')
 
-
-check_levels()

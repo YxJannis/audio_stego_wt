@@ -8,7 +8,7 @@ class Embedder:
     Embed messages in wavelet (transform) domain.
     """
 
-    def __init__(self, filepath: str, wavelet_type: str = "db2", msg: str = None, embed_bit: int = 10,
+    def __init__(self, filepath: str, wavelet_type: str = "db2", msg: str = None, embed_bit: int = 12,
                  output_file_name: str = None, write_file_subtype: str = "PCM_16"):
         """
         Initialize Embedder.
@@ -79,9 +79,6 @@ class Embedder:
             new_val = AudioFile.bin2float(new_bin_val)
             self.marked_detail_coeffs[0][i] = new_val
         print(f'Detail coefficients of channel 1 after embedding: \n{self.marked_detail_coeffs[0]}\n')
-
-    def multilevel_decomposition(self):
-        data = pywt.wavedec(self.cover_audio_file.signal_data.T, wavelet=self.wavelet_type, level=2)
 
     def reconstruct_and_write(self):
         """

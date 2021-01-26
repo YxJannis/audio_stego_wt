@@ -8,7 +8,7 @@ class Detector:
     Extract potential messages from sound file
     """
 
-    def __init__(self, filepath: str, wavelet_type: str = "db2", embed_bit: int = 10):
+    def __init__(self, filepath: str, wavelet_type: str = "db2", embed_bit: int = 12):
         """
         Initialize detector object
         :param filepath: Path to input audio file.
@@ -29,7 +29,7 @@ class Detector:
         """
         print(f'\n\nEXTRACTION USING MARKED FILE ---> EMBED_BIT={self.embed_bit}\n--------------------------')
 
-        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, 'db2')
+        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, self.wavelet_type)
         print(f'Detail_coefficients for channel 1: \n{self.detail_coeffs[0]}')
 
         extracted_message = ""

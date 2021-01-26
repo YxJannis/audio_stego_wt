@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from embedder import Embedder
 from detector import Detector
-from statistics import Statistics
 import argparse
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
@@ -137,8 +136,17 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     plt.subplots_adjust(top=0.9, bottom=0.1)
     plt.tight_layout()
     plt.savefig(f'plot_images/{file_title}_{wavelet_type}_{embed_bit}.png')
-    plt.show()
+    #plt.show()
 
+
+def plot_values(values: dict, name: str = 'default'):
+    lists = sorted(values.items())
+    x, y = zip(*lists)
+    plt.scatter(x, y)
+    plt.xticks(range(min(x), max(x)+1, 1))
+    plt.title(name)
+    #plt.show()
+    plt.savefig(f'plot_images/{name}')
 
 
 #if __name__ == '__main__':

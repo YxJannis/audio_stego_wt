@@ -146,6 +146,8 @@ def plot_values(values: dict, name: str = 'default'):
     plt.xticks(range(min(x), max(x)+1, 1))
     plt.yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     plt.title(name)
+    plt.ylabel('Error Rate')
+    plt.xlabel('Embed Bit')
     #plt.show()
     plt.savefig(f'plot_images/{name}')
     plt.close()

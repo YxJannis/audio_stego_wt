@@ -104,9 +104,6 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}')
 
     # plot original audio data
-    length = og_signal_data.shape[0] / sampling_freq
-    time = np.linspace(0., length, og_signal_data.shape[0])
-    #axs[0][0].plot(time, og_signal_data.T[0])
     axs[0][0].plot(og_signal_data)
     axs[0][0].set_title('Audio data (unmodified)')
 
@@ -129,14 +126,17 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     diff_coeff_emb_det = emb_detail_coeffs - det_detail_coeffs
     axs[2][0].plot(diff_sig_og_emb, 'tab:red')
     axs[2][0].set_title('Signal diff. original vs. modified')
+    # axs[2][0].set_yticks([-1.0, -0.5, -0.25, 0.0, 0.25, 0.5, 1.0])
 
     axs[2][1].plot(diff_coeff_og_emb, 'tab:red')
     axs[2][1].set_title('Dcoeff diff. original vs. modified')
+    # axs[2][1].set_yticks([-1.0, -0.5, -0.25, 0.0, 0.25, 0.5, 1.0])
 
-    plt.subplots_adjust(top=0.9, bottom=0.1)
-    plt.tight_layout()
+    # plt.subplots_adjust(top=0.9, bottom=0.1)
+    #plt.tight_layout()
     plt.savefig(f'plot_images/{file_title}_{wavelet_type}_{embed_bit}.png')
     #plt.show()
+    plt.close()
 
 
 def plot_values(values: dict, name: str = 'default'):
@@ -144,9 +144,11 @@ def plot_values(values: dict, name: str = 'default'):
     x, y = zip(*lists)
     plt.scatter(x, y)
     plt.xticks(range(min(x), max(x)+1, 1))
+    plt.yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     plt.title(name)
     #plt.show()
     plt.savefig(f'plot_images/{name}')
+    plt.close()
 
 
 #if __name__ == '__main__':

@@ -58,11 +58,12 @@ class Embedder:
         * wavelet_type: type of mother wavelet for discrete wavelet transform. Defined in init, default 'db2'
         * message: message to be embedded. Defined in init (or generated randomly)
         """
-        print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> EMBED_BIT={self.embed_bit}\n--------------------------')
+        print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> WAVELET= {self.wavelet_type},'
+              f' EMBED_BIT={self.embed_bit}\n--------------------------')
         # dwt on audio_file, transpose signal data due to soundfile.read array shape
         self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.cover_audio_file.signal_data.T, self.wavelet_type)
         self.marked_detail_coeffs = self.detail_coeffs.copy()
-        print(f'Detail coefficients for channel 1: \n{self.detail_coeffs[0]}')
+        # print(f'Detail coefficients for channel 1: \n{self.detail_coeffs[0]}')
         print(f'Embedded message:\n (First 64 bits): {self.message[:64]}, (last 64 bits): {self.message[-64:]}')
 
         # only use detail_coeffs of first channel to embed in this case (detail_coeffs[0]).
@@ -78,7 +79,7 @@ class Embedder:
             new_bin_val = "".join(bin_val_list)
             new_val = AudioFile.bin2float(new_bin_val)
             self.marked_detail_coeffs[0][i] = new_val
-        print(f'Detail coefficients of channel 1 after embedding: \n{self.marked_detail_coeffs[0]}\n')
+        # print(f'Detail coefficients of channel 1 after embedding: \n{self.marked_detail_coeffs[0]}\n')
 
     def reconstruct_and_write(self):
         """

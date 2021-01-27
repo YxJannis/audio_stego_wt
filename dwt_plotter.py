@@ -18,9 +18,7 @@ def plot_wt(audio_file, ax=None):
     time = np.linspace(0., length, data.shape[0])
 
     plt.plot(time, data.T[0], label="Left channel")
-    #plt.plot(time, data[:, 1], label="Right channel")
     plt.title("Audio Data (left channel)")
-    #plt.legend()
 
     return plt
 
@@ -36,9 +34,9 @@ def plot_coeff(audio_file, ax=None):
 
     approx_coeffs, detail_coeffs = pywt.dwt(data, 'db2')
 
-    #plt.plot(time, approx_coeffs, label="Approx. Coeffs")
+    # plt.plot(time, approx_coeffs, label="Approx. Coeffs")
     plt.plot(time, detail_coeffs.T[0], label="Detail. Coeffs")
-    #plt.legend()
+    # plt.legend()
     plt.title("Detail coefficients (left channel)")
 
     return plt
@@ -47,7 +45,6 @@ def plot_coeff(audio_file, ax=None):
 def plot_diff(difference_array, ax=None):
     plt.title("Difference (original vs. embedded)")
     plt.plot(difference_array)
-    #plt.xticks([1, 500000, 1000000, len(difference_array)], [10, 500000, 1000000, len(difference_array)])
     return plt
 
 
@@ -89,7 +86,7 @@ def plot_master(audio_file, difference_array):
 
 
 def plot_master_2(emb: Embedder, det: Detector, file_title: str):
-    og_signal_data = emb.cover_audio_file.signal_data.T[0]        #[0] for channel 1
+    og_signal_data = emb.cover_audio_file.signal_data.T[0]  # [0] for channel 1
     emb_signal_data = emb.reconstructed_audio.signal_data[0]
 
     wavelet_type = emb.wavelet_type
@@ -117,7 +114,6 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     axs[1][1].plot(emb_detail_coeffs, 'tab:orange')
     axs[1][1].set_title('Detail coefficients (modified)')
 
-
     # plot differences
     diff_sig_og_emb = og_signal_data - emb_signal_data
 
@@ -133,9 +129,9 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     # axs[2][1].set_yticks([-1.0, -0.5, -0.25, 0.0, 0.25, 0.5, 1.0])
 
     # plt.subplots_adjust(top=0.9, bottom=0.1)
-    #plt.tight_layout()
+    # plt.tight_layout()
     plt.savefig(f'plot_images/{file_title}_{wavelet_type}_{embed_bit}.png')
-    #plt.show()
+    # plt.show()
     plt.close()
 
 
@@ -143,19 +139,17 @@ def plot_values(values: dict, name: str = 'default'):
     lists = sorted(values.items())
     x, y = zip(*lists)
     plt.scatter(x, y)
-    plt.xticks(range(min(x), max(x)+1, 1))
+    plt.xticks(range(min(x), max(x) + 1, 1))
     plt.yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     plt.title(name)
     plt.ylabel('Error Rate')
     plt.xlabel('Embed Bit')
-    #plt.show()
+    # plt.show()
     plt.savefig(f'plot_images/{name}')
     plt.close()
 
-
-#if __name__ == '__main__':
-    # plot_wt(audio_file_promenade_1)
-    #a = [0.98, -0.98, 0.05, -0.05, 0.42, -0.42]
-    # plot_diff(a)
-    #plot_master(audio_file_promenade_1, a)
-
+# if __name__ == '__main__':
+# plot_wt(audio_file_promenade_1)
+# a = [0.98, -0.98, 0.05, -0.05, 0.42, -0.42]
+# plot_diff(a)
+# plot_master(audio_file_promenade_1, a)

@@ -6,7 +6,7 @@ from audio_file import AudioFile
 
 class Statistics:
     """
-
+    Extract statistics from audio file embedding and detection procedure
     """
 
     def __init__(self, output_file: str = "statistics.csv"):

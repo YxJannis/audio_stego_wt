@@ -1,7 +1,5 @@
 from audio_file import AudioFile
 import pywt
-# TODO: blind detector?
-
 
 class Detector:
     """
@@ -27,7 +25,8 @@ class Detector:
         """
         Extract message from bits at position embed_bit of each coefficient.
         """
-        print(f'\n\nEXTRACTION USING MARKED FILE ---> WAVELET= {self.wavelet_type}, EMBED_BIT={self.embed_bit}\n--------------------------')
+        print(f'\nEXTRACTION USING MARKED FILE ---> WAVELET= {self.wavelet_type}, EMBED_BIT={self.embed_bit}'
+              f'\n--------------------------')
 
         self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, self.wavelet_type)
         # print(f'Detail_coefficients for channel 1: \n{self.detail_coeffs[0]}')
@@ -41,3 +40,8 @@ class Detector:
         print(f'Extracted message:\n (First 64 bits): {extracted_message[:64]},'
               f' (last 64 bits): {extracted_message[-64:]}')
         self.detected_message = extracted_message
+
+    def detect_blind(self):
+        # TODO: implement blind detection without the need for embedding bit. Need some measure to check if detected
+        #   message qualifies as a successful detection
+        return True

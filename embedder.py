@@ -58,7 +58,7 @@ class Embedder:
         * wavelet_type: type of mother wavelet for discrete wavelet transform. Defined in init, default 'db2'
         * message: message to be embedded. Defined in init (or generated randomly)
         """
-        print(f'EMBEDDING USING UNMODIFIED COVER FILE ---> WAVELET= {self.wavelet_type},'
+        print(f'\n\nEMBEDDING USING UNMODIFIED COVER FILE ---> WAVELET= {self.wavelet_type},'
               f' EMBED_BIT={self.embed_bit}\n--------------------------')
         # dwt on audio_file, transpose signal data due to soundfile.read array shape
         self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.cover_audio_file.signal_data.T, self.wavelet_type)

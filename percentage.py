@@ -1,8 +1,12 @@
 from scipy.io import wavfile
+import matplotlib.pyplot as plt
 
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 data = wavfile.read(audio_file_promenade_1)
+
+audio_file_embedded = "output_files/wt_bit12_embedding_PCM16.wav"
+data_mod = wavfile.read(audio_file_embedded)
 
 
 def percentage_audio(audio_org, audio_mod):
@@ -54,4 +58,7 @@ def recreate_array(percentage):
     return rec_sig
 
 
-recreate_array(percentage_audio(data, data))
+# recreate_array(percentage_audio(data, data))
+d = percentage_audio(data, data_mod)
+plt.plot(d)
+plt.show()

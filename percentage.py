@@ -1,4 +1,8 @@
 from scipy.io import wavfile
+import numpy as np
+
+audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
+data = wavfile.read(audio_file_promenade_1)
 
 
 def percentage_audio(audio_org, audio_mod):
@@ -17,7 +21,7 @@ def percentage_audio(audio_org, audio_mod):
 
     for i in range(1726662):
         for j in range(1):
-            mod_x.append(mod[1][0])
+            mod_x.append(mod[i][0])
 
     # calculating the percentage
     for i in range(1726662):
@@ -28,6 +32,17 @@ def percentage_audio(audio_org, audio_mod):
     return percentage
 
 
-audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
-data = wavfile.read(audio_file_promenade_1)
+"""def recreate_signal(percentage):
+    rec_sig = []
+    data_x = data[1]
+    
+    for i in range(1726662):
+        for j in range(1):
+            data_x.append([0][i])
+
+    for x, y in zip(1726662):
+        
+    return rec_sig"""
+
+
 percentage_audio(data, data)

@@ -31,7 +31,7 @@ message = "".join([str(i % 2) for i in range(1726663 + 1000)])     # Message wit
 
 for wavelet_type in wavelet_list:
     error_rates = {}
-    for emb_bit in range(1, 4):
+    for emb_bit in range(1, 17):
         # instantiate embedder who automatically creates output-file with message embedded (in channel 1)
         e = Embedder(input_f, wavelet_type=wavelet_type, msg=message, output_file_name=f'output_files/test_output.wav',
                      embed_bit=emb_bit)

@@ -42,7 +42,7 @@ def recreate_array(percentage):
             data_pair.append(data_x[i][0])
 
     for x, y in zip(data_pair, percentage):
-        rec_sig.extend([x, y])
+        rec_sig.extend([[x, y]])
     print('percentage array: \n')
     print(rec_sig)
     return rec_sig

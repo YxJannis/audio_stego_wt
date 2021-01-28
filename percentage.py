@@ -1,5 +1,5 @@
 from scipy.io import wavfile
-import numpy as np
+
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 data = wavfile.read(audio_file_promenade_1)
@@ -26,8 +26,9 @@ def percentage_audio(audio_org, audio_mod):
     # calculating the percentage
     for i in range(1000):
         if org_y[i] == 0:
+            # will have an impact on the percentage
             org_y[i] = 0.00000000000000001
-        value = (mod_x[i]/org_y[i]) * 100
+        value = 100 - (mod_x[i]/org_y[i]) * 100
         percentage.append(value)
     return percentage
 

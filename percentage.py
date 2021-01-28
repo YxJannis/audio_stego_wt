@@ -28,8 +28,13 @@ def percentage_audio(audio_org, audio_mod):
         if org_y[i] == 0:
             # will have an impact on the percentage
             org_y[i] = 0.00000000000000001
-        value = 100 - (mod_x[i]/org_y[i]) * 100
+        if mod_x[i] == 0:
+            value = 0
+        else:
+            value = 100 - (mod_x[i]/org_y[i]) * 100
+
         percentage.append(value)
+
     return percentage
 
 

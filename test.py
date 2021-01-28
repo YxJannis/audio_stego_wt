@@ -23,14 +23,15 @@ wavelet_list = ['haar',
                 'morl'
                 ]
 
+
 input_f = 'input_files/SaChenPromenade1.wav'
 file_title = 'Promenade1'
-message = "".join([str(i % 2) for i in range(1726662)])     # Message with alternating 0s and 1s (01010101...)
+message = "".join([str(i % 2) for i in range(1726663 + 1000)])     # Message with alternating 0s and 1s (01010101...)
 
 
 for wavelet_type in wavelet_list:
     error_rates = {}
-    for emb_bit in range(1, 30):
+    for emb_bit in range(1, 4):
         # instantiate embedder who automatically creates output-file with message embedded (in channel 1)
         e = Embedder(input_f, wavelet_type=wavelet_type, msg=message, output_file_name=f'output_files/test_output.wav',
                      embed_bit=emb_bit)

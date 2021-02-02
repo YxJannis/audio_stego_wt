@@ -97,38 +97,34 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     emb_detail_coeffs = emb.marked_detail_coeffs[0]
     det_detail_coeffs = det.detail_coeffs[0]
 
-    fig, axs = plt.subplots(3, 2)
+    fig, axs = plt.subplots(2, 2)
     fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}')
 
     # plot original audio data
     axs[0][0].plot(og_signal_data)
     axs[0][0].set_title('Audio data (unmodified)')
+    axs[0][0].set_ylim(min(og_signal_data), max(og_signal_data))
+    signal_data_x_lim = axs[0][0].get_xlim()
 
     axs[1][0].plot(emb_signal_data, 'tab:orange')
     axs[1][0].set_title('Audio data (modified)')
+    axs[1][0].set_ylim(min(og_signal_data), max(og_signal_data))
+    axs[1][0].set_xlim(signal_data_x_lim)
 
     # plot detail coeffs
+    # TODO: remove detail coeffs? and replace with percentage change of differences?
     axs[0][1].plot(og_detail_coeffs)
     axs[0][1].set_title('Detail coefficients (unmodified)')
-
-    axs[1][1].plot(emb_detail_coeffs, 'tab:orange')
-    axs[1][1].set_title('Detail coefficients (modified)')
+    axs[0][1].set_ylim(min(og_signal_data), max(og_signal_data))
 
     # plot differences
     diff_sig_og_emb = og_signal_data - emb_signal_data
+    axs[1][1].plot(diff_sig_og_emb, 'tab:red')
+    axs[1][1].set_title('Signal diff. original vs. modified')
+    axs[1][1].set_ylim(min(og_signal_data), max(og_signal_data))
+    axs[1][1].set_xlim(signal_data_x_lim)
 
-    diff_coeff_og_emb = og_detail_coeffs - emb_detail_coeffs
-    diff_coeff_og_det = og_detail_coeffs - det_detail_coeffs
-    diff_coeff_emb_det = emb_detail_coeffs - det_detail_coeffs
-    axs[2][0].plot(diff_sig_og_emb, 'tab:red')
-    axs[2][0].set_title('Signal diff. original vs. modified')
-    # axs[2][0].set_yticks([-1.0, -0.5, -0.25, 0.0, 0.25, 0.5, 1.0])
-
-    axs[2][1].plot(diff_coeff_og_emb, 'tab:red')
-    axs[2][1].set_title('Dcoeff diff. original vs. modified')
-    # axs[2][1].set_yticks([-1.0, -0.5, -0.25, 0.0, 0.25, 0.5, 1.0])
-
-    # plt.subplots_adjust(top=0.9, bottom=0.1)
+    plt.subplots_adjust(hspace=0.4, wspace=0.3)
     # plt.tight_layout()
     plt.savefig(f'plot_images/{file_title}_{wavelet_type}_{embed_bit}.png')
     # plt.show()

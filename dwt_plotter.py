@@ -99,7 +99,7 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     det_detail_coeffs = det.detail_coeffs[0]
 
     diff_sig_og_emb = og_signal_data - emb_signal_data
-    diff_percentage = percentage.percentage_wav(og_signal_data, emb_signal_data)
+    diff_percentage = percentage.percentage_wav_2(og_signal_data, emb_signal_data)
 
     fig, axs = plt.subplots(2, 2)
     fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}')
@@ -129,6 +129,7 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     #axs[0][1].set_xlim(signal_data_x_lim)
 
     # plot percentage differences
+    # TODO: percentage plot doesnt really match. Idk why, needs more testing and time
     axs[1][1].plot(diff_percentage)
     axs[1][1].set_title('Signal diff. (percentage)')
 

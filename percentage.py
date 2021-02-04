@@ -43,6 +43,30 @@ def percentage_wav(audio_org, audio_mod):
     return percentage
 
 
+# test function to include percentage plot in dwt_plotter
+def percentage_wav_2(audio_org, audio_mod):
+    percentage = []
+
+    rounds = 1726663
+
+    # getting the points
+    org_y = audio_org
+    mod_x = audio_mod
+
+
+    # calculating the percentage
+    for i in range(rounds):
+        if org_y[i] == 0:
+            value = 0.0
+        elif mod_x[i] == 0:
+            value = 0.0
+        else:
+            value = abs(100 - (mod_x[i] / org_y[i]) * 100)
+        percentage.append(round(value))
+
+    return percentage
+
+
 def recreate_array(percentage):
     rec_sig = []
     data_x = data_sound[1]
@@ -58,9 +82,10 @@ def recreate_array(percentage):
     return rec_sig
 
 
-# recreate_array(percentage_audio(data, data))
-d = percentage_wav(data_sound, data_mod_sound)
-plt.title("Percentage of comparison of two signals")
-plt.ylabel("Percentage in ${0}".format(100))
-plt.plot(d)
-plt.show()
+if __name__ == '__main__':
+    # recreate_array(percentage_audio(data, data))
+    d = percentage_wav(data_sound, data_mod_sound)
+    plt.title("Percentage of comparison of two signals")
+    plt.ylabel("Percentage in ${0}".format(100))
+    plt.plot(d)
+    plt.show()

@@ -5,6 +5,7 @@ import numpy as np
 from embedder import Embedder
 from detector import Detector
 import argparse
+import percentage
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
 
@@ -97,6 +98,9 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     emb_detail_coeffs = emb.marked_detail_coeffs[0]
     det_detail_coeffs = det.detail_coeffs[0]
 
+    diff_sig_og_emb = og_signal_data - emb_signal_data
+    diff_percentage = percentage.percentage_wav(og_signal_data, emb_signal_data)
+
     fig, axs = plt.subplots(2, 2)
     fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}')
 
@@ -111,20 +115,22 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     #axs[1][0].set_ylim(min(og_signal_data), max(og_signal_data))
     #axs[1][0].set_xlim(signal_data_x_lim)
 
-    # plot detail coeffs
-    # TODO: remove detail coeffs? and replace with percentage change of differences?
-    axs[0][1].scatter(og_detail_coeffs)
-    axs[0][1].set_title('Detail coefficients (unmodified)')
-    #axs[0][1].set_ylim(y_lim)
-    #axs[0][1].set_ylim(min(og_signal_data), max(og_signal_data))
-
-    # plot differences
-    diff_sig_og_emb = og_signal_data - emb_signal_data
-    axs[1][1].plot(diff_sig_og_emb, 'tab:red')
-    axs[1][1].set_title('Signal diff. original vs. modified')
+    # plot detail coeffs?
+    #axs[1][1].scatter(og_detail_coeffs)
+    #axs[1][1].set_title('Detail coefficients (unmodified)')
     #axs[1][1].set_ylim(y_lim)
     #axs[1][1].set_ylim(min(og_signal_data), max(og_signal_data))
-    #axs[1][1].set_xlim(signal_data_x_lim)
+
+    # plot differences
+    axs[0][1].plot(diff_sig_og_emb, 'tab:red')
+    axs[0][1].set_title('Signal diff. original vs. modified')
+    #axs[0][1].set_ylim(y_lim)
+    #axs[0][1].set_ylim(min(og_signal_data), max(og_signal_data))
+    #axs[0][1].set_xlim(signal_data_x_lim)
+
+    # plot percentage differences
+    axs[1][1].plot(diff_percentage)
+    axs[1][1].set_title('Signal diff. (percentage)')
 
     plt.subplots_adjust(hspace=0.4, wspace=0.3)
     # plt.tight_layout()

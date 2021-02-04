@@ -32,12 +32,10 @@ def percentage_wav(audio_org, audio_mod, file_type):
 
     # get access to the y coordinates
     for i in range(rounds):
-        for j in range(1):
-            org_y.append(org[i][1])
+        org_y.append(org[i][0])
 
     for i in range(rounds):
-        for j in range(1):
-            mod_x.append(mod[i][1])
+        mod_x.append(mod[i][0])
 
     # calculating the percentage
     for i in range(rounds):
@@ -50,7 +48,7 @@ def percentage_wav(audio_org, audio_mod, file_type):
         else:
             value = 100 - (mod_x[i] / org_y[i]) * 100
 
-        percentage.append(value)
+        percentage.append(round(value))
 
     return percentage
 
@@ -61,8 +59,7 @@ def recreate_array(percentage):
     data_pair = []
 
     for i in range(1000):
-        for j in range(1):
-            data_pair.append(data_x[i][0])
+        data_pair.append(data_x[i][0])
 
     for x, y in zip(data_pair, percentage):
         rec_sig.extend([[x, y]])

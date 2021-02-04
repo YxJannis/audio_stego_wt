@@ -1,5 +1,5 @@
 import sys
-
+import numpy as np
 import soundfile as sf
 import matplotlib.pyplot as plt
 
@@ -36,7 +36,7 @@ def percentage_wav(audio_org, audio_mod):
         if mod_x[i] == 0:
             value = 0
         else:
-            value = 100 - (mod_x[i] / org_y[i]) * 100
+            value = abs(100 - (mod_x[i] / org_y[i]) * 100)
 
         percentage.append(round(value))
 
@@ -45,7 +45,7 @@ def percentage_wav(audio_org, audio_mod):
 
 def recreate_array(percentage):
     rec_sig = []
-    data_x = data[1]
+    data_x = data_sound[1]
     data_pair = []
 
     for i in range(1000):
@@ -60,5 +60,7 @@ def recreate_array(percentage):
 
 # recreate_array(percentage_audio(data, data))
 d = percentage_wav(data_sound, data_mod_sound)
+plt.title("Percentage of comparison of two signals")
+plt.ylabel("Percentage in ${0}".format(100))
 plt.plot(d)
 plt.show()

@@ -1,31 +1,21 @@
 import sys
 
-from scipy.io import wavfile
 import soundfile as sf
 import matplotlib.pyplot as plt
 
-audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
-data = wavfile.read(audio_file_promenade_1)
-
-audio_file_embedded = "output_files/wt_bit12_embedding_PCM16.wav"
-data_mod = wavfile.read(audio_file_embedded)
 
 data_sound = sf.read("input_files/SaChenPromenade1.wav")
 data_mod_sound = sf.read("output_files/wt_bit12_embedding_PCM16.wav")
 
 
-def percentage_wav(audio_org, audio_mod, file_type):
+def percentage_wav(audio_org, audio_mod):
     percentage = []
 
     rounds = 1726663
 
     # getting the points
-    if file_type == "wav":
-        org = audio_org[1]
-        mod = audio_mod[1]
-    else:
-        org = audio_org[0]
-        mod = audio_mod[0]
+    org = audio_org[0]
+    mod = audio_mod[0]
 
     org_y = []
     mod_x = []
@@ -69,6 +59,6 @@ def recreate_array(percentage):
 
 
 # recreate_array(percentage_audio(data, data))
-d = percentage_wav(data_sound, data_mod_sound, "sound")
+d = percentage_wav(data_sound, data_mod_sound)
 plt.plot(d)
 plt.show()

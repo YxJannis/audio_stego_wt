@@ -59,7 +59,7 @@ def percentage_wav(audio_org, audio_mod):
 def percentage_wav_2(audio_org, audio_mod):
     percentage = []
 
-    rounds = 1726663
+    rounds = len(audio_org)
 
     # getting the points
     org_y = audio_org

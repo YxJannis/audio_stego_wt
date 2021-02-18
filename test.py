@@ -33,7 +33,7 @@ message = AudioFile.generate_random_message(message_length, seed)
 
 for wavelet_type in wavelet_list:
     error_rates = {}
-    for emb_bit in range(2, 17):
+    for emb_bit in range(1, 17):
         # instantiate embedder who automatically creates output-file with message embedded (in channel 1)
         e = Embedder(input_f, wavelet_type=wavelet_type, msg=message, output_file_name=f'output_files/test_output.wav',
                      embed_bit=emb_bit)

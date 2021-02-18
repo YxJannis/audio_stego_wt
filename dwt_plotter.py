@@ -1,6 +1,7 @@
 import pywt
 from scipy.io import wavfile
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 from embedder import Embedder
 from detector import Detector
@@ -87,8 +88,10 @@ def plot_master(audio_file, difference_array):
 
 
 def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: int = None):
+    mpl.rcParams['agg.path.chunksize'] = 10000
     og_signal_data = emb.cover_audio_file.signal_data.T[0]          # [0] for channel 1
     emb_signal_data = emb.reconstructed_audio.signal_data[0]        # [0] for channel 1
+    det_signal_data = det.audio_file.signal_data.T[0]
 
     wavelet_type = emb.wavelet_type
     embed_bit = emb.embed_bit
@@ -98,8 +101,8 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: i
     emb_detail_coeffs = emb.marked_detail_coeffs[0]
     det_detail_coeffs = det.detail_coeffs[0]
 
-    diff_sig_og_emb = og_signal_data - emb_signal_data
-    diff_percentage = percentage.percentage_wav_2(og_signal_data, emb_signal_data)
+    diff_sig_og_emb = og_signal_data - det_signal_data
+    diff_percentage = percentage.percentage_wav_2(og_signal_data, det_signal_data)
 
     fig, axs = plt.subplots(2, 2, figsize=(15, 5))
     fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}, Seed: {message_seed}')
@@ -109,8 +112,9 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: i
     axs[0][0].set_title('Audio data (unmodified)')
 
     # plot signal data from embedded file
-    axs[1][0].plot(emb_signal_data, 'tab:orange')
+    axs[1][0].plot(det_signal_data, 'tab:orange')
     axs[1][0].set_title('Audio data (modified)')
+    axs[1][0].set_ylim(min(og_signal_data), max(og_signal_data))
 
     # plot differences
     axs[0][1].plot(diff_sig_og_emb, 'tab:red')

@@ -1,17 +1,25 @@
 import sys
-import numpy as np
-import soundfile as sf
-import matplotlib.pyplot as plt
 
+import matplotlib.pyplot as plt
+import soundfile as sf
 
 data_sound = sf.read("input_files/SaChenPromenade1.wav")
 data_mod_sound = sf.read("output_files/wt_bit12_embedding_PCM16.wav")
+
+start = int(sys.argv[1])
+end = int(sys.argv[2])
+
+
+print("Running script : ", sys.argv[0])
+print("Number of arguments: ", len(sys.argv))
+print("You chose those arguments: ", str(sys.argv))
 
 
 def percentage_wav(audio_org, audio_mod):
     percentage = []
 
     rounds = 1726663
+
 
     # getting the points
     org = audio_org[0]
@@ -40,7 +48,7 @@ def percentage_wav(audio_org, audio_mod):
 
         percentage.append(round(value))
 
-    return percentage
+    return percentage[start:end]
 
 
 # test function to include percentage plot in dwt_plotter

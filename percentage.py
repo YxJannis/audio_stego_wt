@@ -22,11 +22,12 @@ print("You chose those arguments: ", str(sys.argv))
 def percentage_wav(audio_org, audio_mod):
     percentage = []
 
-    rounds = 1726663
 
     # getting the points
     org = audio_org[0]
     mod = audio_mod[0]
+
+    rounds = len(org)
 
     org_y = []
     mod_x = []

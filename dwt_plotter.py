@@ -87,8 +87,8 @@ def plot_master(audio_file, difference_array):
 
 
 def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: int = None):
-    og_signal_data = emb.cover_audio_file.signal_data.T[0]  # [0] for channel 1
-    emb_signal_data = emb.reconstructed_audio.signal_data[0]
+    og_signal_data = emb.cover_audio_file.signal_data.T[0]          # [0] for channel 1
+    emb_signal_data = emb.reconstructed_audio.signal_data[0]        # [0] for channel 1
 
     wavelet_type = emb.wavelet_type
     embed_bit = emb.embed_bit
@@ -107,34 +107,22 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: i
     # plot original audio data
     axs[0][0].plot(og_signal_data)
     axs[0][0].set_title('Audio data (unmodified)')
-    # axs[0][0].set_ylim(min(og_signal_data), max(og_signal_data))
 
+    # plot signal data from embedded file
     axs[1][0].plot(emb_signal_data, 'tab:orange')
     axs[1][0].set_title('Audio data (modified)')
-    # axs[1][0].set_ylim(y_lim)
-    # axs[1][0].set_ylim(min(og_signal_data), max(og_signal_data))
-    # axs[1][0].set_xlim(signal_data_x_lim)
-
-    # plot detail coeffs?
-    # axs[1][1].scatter(og_detail_coeffs)
-    # axs[1][1].set_title('Detail coefficients (unmodified)')
-    # axs[1][1].set_ylim(y_lim)
-    # axs[1][1].set_ylim(min(og_signal_data), max(og_signal_data))
 
     # plot differences
     axs[0][1].plot(diff_sig_og_emb, 'tab:red')
     axs[0][1].set_title('Signal diff. original vs. modified')
-    # axs[0][1].set_ylim(y_lim)
     axs[0][1].set_ylim(min(og_signal_data), max(og_signal_data))
-    # axs[0][1].set_xlim(signal_data_x_lim)
 
     # plot percentage differences
     axs[1][1].plot(diff_percentage)
     axs[1][1].set_title('Signal diff. (percentage)')
     axs[1][1].set_ylim(0, 500)
-    axs[1][1].set_yticks([0, 100, 200, 300, 400, 500])
-    yticklabels = ['0', '100', '200', '300', '400', '> 500']
-    axs[1][1].set_yticklabels(yticklabels)
+    axs[1][1].set_yticks([0, 100, 200, 300, 400, 500])                      # upper bound percentage values by 500 and
+    axs[1][1].set_yticklabels(['0', '100', '200', '300', '400', '> 500'])   # update y tick labels accordingly
 
     plt.subplots_adjust(hspace=0.4, wspace=0.3)
     plt.savefig(f'plot_images/{file_title}_{wavelet_type}_{embed_bit}.png')

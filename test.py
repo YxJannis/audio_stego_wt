@@ -45,7 +45,7 @@ for wavelet_type in wavelet_list:
         error_rate = AudioFile.check_error_rate(e.message, d.detected_message)
 
         # plot
-        plot_master_2(e, d, file_title)
+        plot_master_2(e, d, file_title, seed)
         error_rates[emb_bit] = error_rate
 
     plot_values(error_rates, f'Error_Rates_{wavelet_type}')

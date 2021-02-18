@@ -86,7 +86,7 @@ def plot_master(audio_file, difference_array):
     plt.show()
 
 
-def plot_master_2(emb: Embedder, det: Detector, file_title: str):
+def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: int = None):
     og_signal_data = emb.cover_audio_file.signal_data.T[0]  # [0] for channel 1
     emb_signal_data = emb.reconstructed_audio.signal_data[0]
 
@@ -101,8 +101,8 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     diff_sig_og_emb = og_signal_data - emb_signal_data
     diff_percentage = percentage.percentage_wav_2(og_signal_data, emb_signal_data)
 
-    fig, axs = plt.subplots(2, 2)
-    fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}')
+    fig, axs = plt.subplots(2, 2, figsize=(15, 5))
+    fig.suptitle(f'Wavelet: {wavelet_type}, Embed Bit: {embed_bit}, Seed: {message_seed}')
 
     # plot original audio data
     axs[0][0].plot(og_signal_data)
@@ -131,9 +131,12 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     # plot percentage differences
     axs[1][1].plot(diff_percentage)
     axs[1][1].set_title('Signal diff. (percentage)')
+    axs[1][1].set_ylim(0, 500)
+    axs[1][1].set_yticks([0, 100, 200, 300, 400, 500])
+    yticklabels = ['0', '100', '200', '300', '400', '> 500']
+    axs[1][1].set_yticklabels(yticklabels)
 
     plt.subplots_adjust(hspace=0.4, wspace=0.3)
-    # plt.tight_layout()
     plt.savefig(f'plot_images/{file_title}_{wavelet_type}_{embed_bit}.png')
     # plt.show()
     plt.close()

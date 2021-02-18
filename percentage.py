@@ -62,18 +62,19 @@ def percentage_wav_2(audio_org, audio_mod):
     rounds = len(audio_org)
 
     # getting the points
-    org_y = audio_org
-    mod_x = audio_mod
+    org = audio_org
+    mod = audio_mod
 
     # calculating the percentage
     for i in range(rounds):
-        if org_y[i] == 0:
-            value = 0.0
-        elif mod_x[i] == 0:
-            value = 0.0
+        if org[i] == 0:
+            value = 0.0     # cant calculate percentage increase from 0
+        elif mod[i] == 0:
+            value = 100     # if modified coefficient is 0, the change to coefficient is 100%
         else:
-            value = abs(100 - (mod_x[i] / org_y[i]) * 100)
-        percentage.append(round(value))
+            # value = abs(100 - (mod_x[i] / org_y[i]) * 100)
+            value = abs((1-mod[i]/org[i]))
+        percentage.append(value)
 
     return percentage
 

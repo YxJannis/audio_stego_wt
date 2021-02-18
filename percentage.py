@@ -6,9 +6,13 @@ import soundfile as sf
 data_sound = sf.read("input_files/SaChenPromenade1.wav")
 data_mod_sound = sf.read("output_files/wt_bit12_embedding_PCM16.wav")
 
-start = int(sys.argv[1])
-end = int(sys.argv[2])
-
+try:
+    start = int(sys.argv[1])
+    end = int(sys.argv[2])
+except:
+    print("You provided no area for closer inspection. Default plot will be created!")
+    start = 0
+    end = 1726663
 
 print("Running script : ", sys.argv[0])
 print("Number of arguments: ", len(sys.argv))
@@ -19,7 +23,6 @@ def percentage_wav(audio_org, audio_mod):
     percentage = []
 
     rounds = 1726663
-
 
     # getting the points
     org = audio_org[0]
@@ -60,7 +63,6 @@ def percentage_wav_2(audio_org, audio_mod):
     # getting the points
     org_y = audio_org
     mod_x = audio_mod
-
 
     # calculating the percentage
     for i in range(rounds):

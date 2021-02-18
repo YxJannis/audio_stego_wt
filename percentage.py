@@ -3,8 +3,8 @@ import sys
 import matplotlib.pyplot as plt
 import soundfile as sf
 
-data_sound = sf.read("input_files/SaChenPromenade1.wav")
-data_mod_sound = sf.read("output_files/wt_bit12_embedding_PCM16.wav")
+data_sound, f = sf.read("input_files/SaChenPromenade1.wav")
+data_mod_sound, f = sf.read("output_files/wt_bit12_embedding_PCM16.wav")
 
 try:
     start = int(sys.argv[1])
@@ -22,35 +22,22 @@ print("You chose those arguments: ", str(sys.argv))
 def percentage_wav(audio_org, audio_mod):
     percentage = []
 
+    rounds = len(audio_org)
 
     # getting the points
-    org = audio_org[0]
-    mod = audio_mod[0]
-
-    rounds = len(org)
-
-    org_y = []
-    mod_x = []
-
-    # get access to the y coordinates
-    for i in range(rounds):
-        org_y.append(org[i][0])
-
-    for i in range(rounds):
-        mod_x.append(mod[i][0])
+    org = audio_org
+    mod = audio_mod
 
     # calculating the percentage
     for i in range(rounds):
-        if org_y[i] == 0:
-            # will have an impact on the percentage
-            # 2.2e-308
-            org_y[i] = sys.float_info.min
-        if mod_x[i] == 0:
-            value = 0
+        if org[i] == 0:
+            value = 0.0     # cant calculate percentage increase from 0
+        elif mod[i] == 0:
+            value = 1    # if modified coefficient is 0, the change to coefficient is 100%
         else:
-            value = abs(100 - (mod_x[i] / org_y[i]) * 100)
-
-        percentage.append(round(value))
+            # value = abs(100 - (mod_x[i] / org_y[i]) * 100)
+            value = abs((1-mod[i]/org[i]))
+        percentage.append(value)
 
     return percentage[start:end]
 
@@ -70,7 +57,7 @@ def percentage_wav_2(audio_org, audio_mod):
         if org[i] == 0:
             value = 0.0     # cant calculate percentage increase from 0
         elif mod[i] == 0:
-            value = 100     # if modified coefficient is 0, the change to coefficient is 100%
+            value = 1     # if modified coefficient is 0, the change to coefficient is 100%
         else:
             # value = abs(100 - (mod_x[i] / org_y[i]) * 100)
             value = abs((1-mod[i]/org[i]))
@@ -96,8 +83,9 @@ def recreate_array(percentage):
 
 if __name__ == '__main__':
     # recreate_array(percentage_audio(data, data))
-    d = percentage_wav(data_sound, data_mod_sound)
+    d = percentage_wav(data_sound.T[0], data_mod_sound.T[0])
     plt.title("Percentage of comparison of two signals")
-    plt.ylabel("Percentage in ${0}".format(100))
+    plt.ylabel("Percentage")
     plt.plot(d)
+    plt.savefig(f'plot_images/percentage')
     plt.show()

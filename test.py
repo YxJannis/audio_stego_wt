@@ -23,11 +23,10 @@ wavelet_list = ['haar',
                 'morl'
                 ]
 
-
-input_f = 'input_files/SaChenPromenade1.wav'
 # input_f = 'input_files/file_example_WAV_2MG.wav'  # test file, much smaller file size
-file_title = 'Promenade1'
-seed = 1234
+input_f = 'input_files/SaChenPromenade1.wav'
+file_title = 'Promenade1'   # Use for plot file names saved on disc
+seed = 1234                 # seed for pseudorandom message
 message_length = 1726663 + 1000
 message = AudioFile.generate_random_message(message_length, seed)
 

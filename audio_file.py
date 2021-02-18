@@ -64,12 +64,14 @@ class AudioFile:
         return f'{d:032b}'
 
     @staticmethod
-    def generate_random_message(message_length):
+    def generate_random_message(message_length: int, seed: int = 123):
         """
-        Generate random message as a bitstring.
-        :param message_length: Length of random message.
+        Generate pseudorandom message as a bitstring.
+        :param seed: seed for pseudorandom number
+        :param message_length: Length of pseudorandom message.
         :return: Random bitstring.
         """
+        random.seed(seed)
         random_int = random.randint(0, 2**message_length - 1)
         msg = '{0:b}'.format(random_int).zfill(message_length)
         return msg
@@ -88,3 +90,4 @@ class AudioFile:
             if detected_msg[i] != original_msg[i]:
                 faults = faults + 1
         return faults/len(detected_msg)
+

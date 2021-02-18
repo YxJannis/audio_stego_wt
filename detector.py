@@ -1,6 +1,7 @@
 from audio_file import AudioFile
 import pywt
 
+
 class Detector:
     """
     Extract potential messages from sound file

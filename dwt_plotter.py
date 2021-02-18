@@ -107,26 +107,26 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str):
     # plot original audio data
     axs[0][0].plot(og_signal_data)
     axs[0][0].set_title('Audio data (unmodified)')
-    #axs[0][0].set_ylim(min(og_signal_data), max(og_signal_data))
+    # axs[0][0].set_ylim(min(og_signal_data), max(og_signal_data))
 
     axs[1][0].plot(emb_signal_data, 'tab:orange')
     axs[1][0].set_title('Audio data (modified)')
-    #axs[1][0].set_ylim(y_lim)
-    #axs[1][0].set_ylim(min(og_signal_data), max(og_signal_data))
-    #axs[1][0].set_xlim(signal_data_x_lim)
+    # axs[1][0].set_ylim(y_lim)
+    # axs[1][0].set_ylim(min(og_signal_data), max(og_signal_data))
+    # axs[1][0].set_xlim(signal_data_x_lim)
 
     # plot detail coeffs?
-    #axs[1][1].scatter(og_detail_coeffs)
-    #axs[1][1].set_title('Detail coefficients (unmodified)')
-    #axs[1][1].set_ylim(y_lim)
-    #axs[1][1].set_ylim(min(og_signal_data), max(og_signal_data))
+    # axs[1][1].scatter(og_detail_coeffs)
+    # axs[1][1].set_title('Detail coefficients (unmodified)')
+    # axs[1][1].set_ylim(y_lim)
+    # axs[1][1].set_ylim(min(og_signal_data), max(og_signal_data))
 
     # plot differences
     axs[0][1].plot(diff_sig_og_emb, 'tab:red')
     axs[0][1].set_title('Signal diff. original vs. modified')
-    #axs[0][1].set_ylim(y_lim)
-    #axs[0][1].set_ylim(min(og_signal_data), max(og_signal_data))
-    #axs[0][1].set_xlim(signal_data_x_lim)
+    # axs[0][1].set_ylim(y_lim)
+    # axs[0][1].set_ylim(min(og_signal_data), max(og_signal_data))
+    # axs[0][1].set_xlim(signal_data_x_lim)
 
     # plot percentage differences
     # TODO: percentage plot doesnt really match. Idk why, needs more testing and time
@@ -153,8 +153,4 @@ def plot_values(values: dict, name: str = 'default'):
     plt.savefig(f'plot_images/{name}')
     plt.close()
 
-# if __name__ == '__main__':
-# plot_wt(audio_file_promenade_1)
-# a = [0.98, -0.98, 0.05, -0.05, 0.42, -0.42]
-# plot_diff(a)
-# plot_master(audio_file_promenade_1, a)
+

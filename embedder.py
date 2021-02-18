@@ -33,7 +33,7 @@ class Embedder:
 
         # message size handling
         if msg is None:
-            self.message = AudioFile.generate_random_message(self.max_message_length+1)
+            self.message = AudioFile.generate_random_message(self.max_message_length + 1)
         else:
             if len(msg) > self.max_message_length+1:
                 print(f'Message too long, will be cut off eventually.')

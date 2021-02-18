@@ -24,10 +24,12 @@ wavelet_list = ['haar',
                 ]
 
 
-input_f = 'input_files/SaChenPromenade1.wav'
-# input_f = 'input_files/file_example_WAV_2MG.wav'  # test file, much smaller file size
+# input_f = 'input_files/SaChenPromenade1.wav'
+input_f = 'input_files/file_example_WAV_2MG.wav'  # test file, much smaller file size
 file_title = 'Promenade1'
-message = "".join([str(i % 2) for i in range(1726663 + 1000)])     # Message with alternating 0s and 1s (01010101...)
+seed = 1234
+message_length = 1726663 + 1000
+message = AudioFile.generate_random_message(message_length, seed)
 
 
 for wavelet_type in wavelet_list:

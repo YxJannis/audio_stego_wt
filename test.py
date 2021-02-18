@@ -24,8 +24,8 @@ wavelet_list = ['haar',
                 ]
 
 
-# input_f = 'input_files/SaChenPromenade1.wav'
-input_f = 'input_files/file_example_WAV_2MG.wav'  # test file, much smaller file size
+input_f = 'input_files/SaChenPromenade1.wav'
+# input_f = 'input_files/file_example_WAV_2MG.wav'  # test file, much smaller file size
 file_title = 'Promenade1'
 seed = 1234
 message_length = 1726663 + 1000

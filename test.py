@@ -13,20 +13,14 @@ from dwt_plotter import plot_master_2, plot_values
 # https://en.wikipedia.org/wiki/Symlet
 # https://en.wikipedia.org/wiki/Coiflet
 # https://en.wikipedia.org/wiki/Biorthogonal_wavelet
-# https://en.wikipedia.org/wiki/Morlet_wavelet (continuous?)
 wavelet_list = ['haar',
                 'db2', 'db3', 'db4', 'db5', 'db6', 'db12', 'db16', 'db20', 'db30', 'db38',
                 'dmey',
                 'sym2', 'sym3', 'sym4', 'sym5', 'sym6', 'sym12', 'sym16', 'sym20',
                 'coif1', 'coif2', 'coif10', 'coif16',
-                'bior1.1', 'bior1.5', 'bior2.2', 'bior2.8', 'bior3.1', 'bior3.9', 'bior4.4', 'bior6.8',
-                'morl'
+                'bior1.1', 'bior1.5', 'bior2.2', 'bior2.8', 'bior3.1', 'bior3.9', 'bior4.4', 'bior6.8'
                 ]
 
-partial_wavelet_list = ['coif1', 'coif2', 'coif10', 'coif16',
-                        'bior1.1', 'bior1.5', 'bior2.2', 'bior2.8', 'bior3.1', 'bior3.9', 'bior4.4', 'bior6.8',
-                        'morl'
-                        ]
 
 # input_f = 'input_files/file_example_WAV_2MG.wav'  # test file, much smaller file size
 input_f = 'input_files/SaChenPromenade1.wav'
@@ -53,6 +47,6 @@ for wavelet_type in wavelet_list:
         plot_master_2(e, d, file_title, seed)
         error_rates[emb_bit] = error_rate
 
-    plot_values(error_rates, f'Error_Rates_{wavelet_type}')
+    plot_values(error_rates, f'Error_Rates_{wavelet_type}.png')
 
 

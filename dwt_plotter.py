@@ -134,7 +134,7 @@ def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: i
     plt.close()
 
 
-def plot_values(values: dict, name: str = 'default'):
+def plot_error_rates(values: dict, name: str = 'default'):
     lists = sorted(values.items())
     x, y = zip(*lists)
     plt.scatter(x, y)
@@ -144,7 +144,42 @@ def plot_values(values: dict, name: str = 'default'):
     plt.ylabel('Error Rate')
     plt.xlabel('Embed Bit')
     # plt.show()
-    plt.savefig(f'plot_images/{name}')
+    plt.savefig(f'plot_images/{name}.png')
     plt.close()
 
+
+def plot_error_dist_2(error_rates: list, double_errors: list, triple_errors: list, embed_bits: list,
+                      name: str = 'default'):
+    fig, ax = plt.subplots()
+    ax.scatter(y=error_rates, x=embed_bits, color='black', label='Error Rate', marker='o')
+    ax.set_yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    ax.set_xticks(embed_bits)
+    ax.set_xlabel('Embed Bit')
+    ax.set_ylabel('Error Rate')
+    ax2 = ax.twinx()
+    ax2.scatter(y=triple_errors, x=embed_bits, color='red', label='#Triple Errors', marker='o')
+    ax2.scatter(y=double_errors, x=embed_bits, color='blue', label='#Double Errors', marker='o')
+    ax2.set_ylabel("# of subsequent Errors", color='blue')
+    plt.title(name)
+    ax_lines, ax_labels = ax.get_legend_handles_labels()
+    ax2_lines, ax2_labels = ax2.get_legend_handles_labels()
+    ax2.set_yscale('linear')
+    plt.legend(ax_lines + ax2_lines, ax_labels + ax2_labels, loc='upper left')
+    plt.grid(linestyle='--')
+    plt.show()
+    plt.close()
+
+
+def plot_error_dist(single_errors: list, double_errors: list, triple_errors: list, embed_bits: list,
+                    name: str = 'default'):
+    x_vals = embed_bits
+    fig, ax = plt.subplots()
+    ax.set_xlabel('Embed Bit')
+    ax.scatter(y=single_errors, x=x_vals, color='red', label='Single Error')
+    ax.scatter(y=double_errors, x=x_vals, color='blue', label='Double Error')
+    ax.scatter(y=triple_errors, x=x_vals, color='green', label='Triple Error')
+    ax.set_ylabel("#Subsequent errors")
+    plt.legend(loc='upper left')
+    plt.show()
+    plt.close()
 

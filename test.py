@@ -93,14 +93,14 @@ def test_error_distribution(file, emb_bit, wavelet_type):
     return error_rate, single_error, double_error, triple_error
 
 
-test_wavelet_list = ['haar']
+small_wavelet_list = ['haar', 'db2', 'dmey', 'sym2', 'coif1', 'bior1.1']
 
-for wavelet_type in test_wavelet_list:
+for wavelet_type in small_wavelet_list:
     error_rates = []
     single_errors = []
     double_errors = []
     triple_errors = []
-    embed_bits = [i for i in range(2, 15)]
+    embed_bits = [i for i in range(1, 17)]
     # embed_bits = [12, 13, 14, 15, 16]
     for emb_bit in embed_bits:
         er, se, de, te = test_error_distribution(input_file, emb_bit, wavelet_type)
@@ -108,6 +108,6 @@ for wavelet_type in test_wavelet_list:
         single_errors.append(se)
         double_errors.append(de)
         triple_errors.append(te)
-    plot_error_dist_2(error_rates, double_errors, triple_errors, embed_bits, f'Error Analysis: {wavelet_type}')
+    plot_error_dist_2(error_rates, double_errors, triple_errors, embed_bits, f'error_analysis_{wavelet_type}')
     # plot_error_dist(single_errors, double_errors, triple_errors, embed_bits)
 

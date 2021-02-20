@@ -163,10 +163,11 @@ def plot_error_dist_2(error_rates: list, double_errors: list, triple_errors: lis
     plt.title(name)
     ax_lines, ax_labels = ax.get_legend_handles_labels()
     ax2_lines, ax2_labels = ax2.get_legend_handles_labels()
-    ax2.set_yscale('linear')
-    plt.legend(ax_lines + ax2_lines, ax_labels + ax2_labels, loc='upper left')
+    ax2.set_yscale('log')
+    plt.legend(ax_lines + ax2_lines, ax_labels + ax2_labels, loc='upper center')
     plt.grid(linestyle='--')
-    plt.show()
+    # plt.show()
+    plt.savefig(f'plot_images/{name}.png')
     plt.close()
 
 

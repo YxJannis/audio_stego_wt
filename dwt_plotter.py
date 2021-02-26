@@ -148,8 +148,8 @@ def plot_error_rates(values: dict, name: str = 'default'):
     plt.close()
 
 
-def plot_error_dist_2(error_rates: list, double_errors: list, triple_errors: list, embed_bits: list,
-                      name: str = 'default'):
+def plot_error_dist(error_rates: list, double_errors: list, triple_errors: list, embed_bits: list,
+                    name: str = 'default'):
     fig, ax = plt.subplots()
     ax.scatter(y=error_rates, x=embed_bits, color='black', label='Error Rate', marker='o')
     ax.set_yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
@@ -171,14 +171,15 @@ def plot_error_dist_2(error_rates: list, double_errors: list, triple_errors: lis
     plt.close()
 
 
-def plot_error_dist(single_errors: list, double_errors: list, triple_errors: list, embed_bits: list,
-                    name: str = 'default'):
+def plot_error_dist_rates(error_rates: list, double_error_rates: list, triple_error_rates: list, embed_bits: list,
+                          name: str = 'default'):
     x_vals = embed_bits
     fig, ax = plt.subplots()
     ax.set_xlabel('Embed Bit')
-    ax.scatter(y=single_errors, x=x_vals, color='red', label='Single Error')
-    ax.scatter(y=double_errors, x=x_vals, color='blue', label='Double Error')
-    ax.scatter(y=triple_errors, x=x_vals, color='green', label='Triple Error')
+    ax.set_yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
+    ax.scatter(y=error_rates, x=x_vals, color='red', label='Single Error')
+    ax.scatter(y=double_error_rates, x=x_vals, color='blue', label='Double Error')
+    ax.scatter(y=triple_error_rates, x=x_vals, color='green', label='Triple Error')
     ax.set_ylabel("#Subsequent errors")
     plt.legend(loc='upper left')
     plt.show()

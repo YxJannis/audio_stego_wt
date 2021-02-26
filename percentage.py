@@ -18,18 +18,9 @@ print("samples = {}".format(f))
 print("Running script : ", sys.argv[0])
 print("Number of arguments: ", len(sys.argv))
 print("You chose those arguments: ", str(sys.argv))
-print(data_sound[2014])
-print(data_mod_sound[2014])
-print(abs(data_mod_sound[2014] / data_sound[2014]) * 100)
-"""value_t = []
-for i in range(len(data_sound)):
-    value = abs((1 - data_sound[i] / data_mod_sound[i]))
-    value_t.append(value)
-
-print("value")
-print(value_t)
-plt.plot(value_t)
-plt.show()"""
+print(data_sound[0])
+print(data_mod_sound[0])
+print(abs((data_sound[0] - data_mod_sound[0]) / data_sound[0]))
 
 
 def percentage_one(audio_org, audio_mod):
@@ -41,7 +32,7 @@ def percentage_one(audio_org, audio_mod):
         elif audio_mod[i] == 0:
             value = 1
         else:
-            value = abs((audio_mod[i] / audio_org[i]) * 100)
+            value = abs(((audio_org[i] - audio_mod[i]) / audio_org[i])*100)
         result.append(value)
     return result[start:end]
 

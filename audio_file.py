@@ -33,10 +33,11 @@ class AudioFile:
         Read signal_data, sampling rate, signal size and maximum length of a potential watermark for wt embedding
         """
         self.signal_data, self.sampling_rate = soundfile.read(self.file_path)
+        self.signal_data = self.signal_data.T
         self.size = self.signal_data.shape[0]
         self.max_message_len = self.size / self.sampling_rate
 
-    def write_file(self, write_file_subtype: str = 'PCM_16', transpose: bool = True):
+    def write_file(self, write_file_subtype: str = 'PCM_16', transpose: bool = False):
         """
         Write signal data, sampling rate to file path
         :param write_file_subtype: Subtype for output .wav file. Subtypes can impact the size of the output file.

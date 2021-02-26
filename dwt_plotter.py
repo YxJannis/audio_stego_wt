@@ -89,9 +89,9 @@ def plot_master(audio_file, difference_array):
 
 def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: int = None):
     mpl.rcParams['agg.path.chunksize'] = 10000
-    og_signal_data = emb.cover_audio_file.signal_data.T[0]          # [0] for channel 1
+    og_signal_data = emb.cover_audio_file.signal_data[0]          # [0] for channel 1
     emb_signal_data = emb.reconstructed_audio.signal_data[0]        # [0] for channel 1
-    det_signal_data = det.audio_file.signal_data.T[0]
+    det_signal_data = det.audio_file.signal_data[0]
 
     wavelet_type = emb.wavelet_type
     embed_bit = emb.embed_bit

@@ -61,7 +61,7 @@ class Embedder:
         print(f'\n\nEMBEDDING USING UNMODIFIED COVER FILE ---> WAVELET= {self.wavelet_type},'
               f' EMBED_BIT={self.embed_bit}\n--------------------------')
         # dwt on audio_file, transpose signal data due to soundfile.read array shape
-        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.cover_audio_file.signal_data.T, self.wavelet_type)
+        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.cover_audio_file.signal_data, self.wavelet_type)
         self.marked_detail_coeffs = self.detail_coeffs.copy()
         # print(f'Detail coefficients for channel 1: \n{self.detail_coeffs[0]}')
         print(f'Embedded message:\n (First 64 bits): {self.message[:64]}, (last 64 bits): {self.message[-64:]}')

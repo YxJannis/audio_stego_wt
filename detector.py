@@ -29,7 +29,7 @@ class Detector:
         print(f'\nEXTRACTION USING MARKED FILE ---> WAVELET= {self.wavelet_type}, EMBED_BIT={self.embed_bit}'
               f'\n--------------------------')
 
-        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data.T, self.wavelet_type)
+        self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data, self.wavelet_type)
         # print(f'Detail_coefficients for channel 1: \n{self.detail_coeffs[0]}')
 
         extracted_message = ""

@@ -10,21 +10,19 @@ try:
     start = int(sys.argv[1])
     end = int(sys.argv[2])
     index = int(sys.argv[3])
+    width = int(sys.argv[4])
 except:
     print("You provided no area for closer inspection. Default plot will be created!")
     start = 0
     end = len(data_sound)
+    index = None
+    width = None
 
 print("samples = {}".format(f))
 print("Running script : ", sys.argv[0])
 print("Number of arguments: ", len(sys.argv))
 print("You chose those arguments: ", str(sys.argv))
 
-
-# For direct testing purposes
-# print(data_sound[0])
-# print(data_mod_sound[0])
-# print(abs((data_sound[0] - data_mod_sound[0]) / data_sound[0]))
 
 # index is the wanted point where an average should be calculated
 # width represents the range to the left and right of this given point
@@ -34,6 +32,7 @@ def percentage_one(audio_org, audio_mod, index=None, width=None):
     result = []
 
     if index is None:
+        print("First")
         for i in range(rounds):
             if audio_org[i] == 0:
                 value = 0.0
@@ -45,6 +44,7 @@ def percentage_one(audio_org, audio_mod, index=None, width=None):
 
     # This part will trigger, when an optional index is provided for an average calculation based on the given parameter
     else:
+        print("Second")
         average_org = audio_org[index - width:index + width]
         average_mod = audio_mod[index - width:index + width]
 
@@ -70,7 +70,7 @@ def percentage_one(audio_org, audio_mod, index=None, width=None):
             elif audio_mod[i] == 0:
                 value = 1
             elif i == index:
-                value = abs((average_mod_int - average_mod_int/average_org_int) * 100)
+                value = abs((average_mod_int - average_mod_int / average_org_int) * 100)
             else:
                 value = abs(((audio_org[i] - audio_mod[i]) / audio_org[i]) * 100)
             result.append(value)
@@ -141,7 +141,7 @@ def recreate_array(percentage):
 
 
 if __name__ == '__main__':
-    d = percentage_one(data_sound, data_mod_sound, 5, 5)  # .T[0]
+    d = percentage_one(data_sound, data_mod_sound, index, width)  # .T[0]
     name = "44 Pianisten 01-Promenade"
     plt.title("Percentage of comparison of two signals")
     plt.ylabel("Percentage")

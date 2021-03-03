@@ -32,8 +32,6 @@ print("You chose those arguments: ", str(sys.argv))
 def percentage_one(audio_org, audio_mod, index=None, width=None):
     rounds = len(audio_org)
     result = []
-    point = [audio_org[index], audio_mod[index]]
-    print(index)
 
     if index is None:
         for i in range(rounds):
@@ -47,11 +45,23 @@ def percentage_one(audio_org, audio_mod, index=None, width=None):
 
     # This part will trigger, when an optional index is provided for an average calculation based on the given parameter
     else:
-        average_org = 0
-        for j in range(width):
-            average_org += audio_org[point:j]
-            average_org += audio_org[j:point]
-        average_org /= 2 * width
+        average_org = audio_org[index - width:index + width]
+        average_mod = audio_mod[index - width:index + width]
+
+        average_org_int = 0
+        average_mod_int = 0
+
+        for j in range(len(average_org)):
+            average_org_int += average_org[j]
+        average_org_int /= len(average_org)
+
+        for k in range(len(average_mod)):
+            average_mod_int += average_mod[k]
+        average_mod_int /= len(average_mod)
+
+        print("int")
+        print(average_org_int)
+        print("AVERAGE")
         print(average_org)
 
         for i in range(rounds):
@@ -60,7 +70,7 @@ def percentage_one(audio_org, audio_mod, index=None, width=None):
             elif audio_mod[i] == 0:
                 value = 1
             elif i == index:
-                value = abs(((audio_org[i] - audio_mod[i]) / average_org) * 100)
+                value = abs((average_mod_int - average_mod_int/average_org_int) * 100)
             else:
                 value = abs(((audio_org[i] - audio_mod[i]) / audio_org[i]) * 100)
             result.append(value)
@@ -131,7 +141,7 @@ def recreate_array(percentage):
 
 
 if __name__ == '__main__':
-    d = percentage_one(data_sound, data_mod_sound, 10, 5)  # .T[0]
+    d = percentage_one(data_sound, data_mod_sound, 5, 5)  # .T[0]
     name = "44 Pianisten 01-Promenade"
     plt.title("Percentage of comparison of two signals")
     plt.ylabel("Percentage")

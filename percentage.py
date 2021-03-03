@@ -6,17 +6,22 @@ import soundfile as sf
 data_sound, f = sf.read("input_files/orig/44 Pianisten 01-Promenade.wav")
 data_mod_sound, f = sf.read("output_files/mod/44 Pianisten 01-Promenade.wav")
 
+
 try:
     start = int(sys.argv[1])
     end = int(sys.argv[2])
-    index = int(sys.argv[3])
-    width = int(sys.argv[4])
+
 except:
     print("You provided no area for closer inspection. Default plot will be created!")
     start = 0
     end = len(data_sound)
-    index = None
-    width = None
+
+try:
+    index = int(sys.argv[3])
+    width = int(sys.argv[4])
+except:
+    print("No index and frame provided")
+
 
 print("samples = {}".format(f))
 print("Running script : ", sys.argv[0])
@@ -141,7 +146,7 @@ def recreate_array(percentage):
 
 
 if __name__ == '__main__':
-    d = percentage_one(data_sound, data_mod_sound, index, width)  # .T[0]
+    d = percentage_one(data_sound, data_mod_sound)  # .T[0]
     name = "44 Pianisten 01-Promenade"
     plt.title("Percentage of comparison of two signals")
     plt.ylabel("Percentage")

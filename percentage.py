@@ -151,7 +151,7 @@ def recreate_array(percentage):
 
 
 if __name__ == '__main__':
-    d = percentage_one(data_sound, data_mod_sound, index, width)  # .T[0]
+    d = percentage_one(data_sound, data_mod_sound, start, end, index, width)  # .T[0]
     name = "44 Pianisten 01-Promenade"
     plt.title("Percentage of comparison of two signals")
     plt.ylabel("Percentage")

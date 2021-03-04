@@ -16,10 +16,13 @@ except:
     start = 0
     end = len(data_sound)
 
+
 try:
     index = int(sys.argv[3])
     width = int(sys.argv[4])
 except:
+    index = None
+    width = None
     print("No index and frame provided")
 
 
@@ -50,12 +53,14 @@ def percentage_one(audio_org, audio_mod, index=None, width=None):
     # This part will trigger, when an optional index is provided for an average calculation based on the given parameter
     else:
         print("Second")
-        average_org = audio_org[index - width:index + width]
-        average_mod = audio_mod[index - width:index + width]
+
+        average_org = audio_org[index - width: index + width]
+        average_mod = audio_mod[index - width: index + width]
 
         average_org_int = 0
         average_mod_int = 0
 
+        print(average_org)
         for j in range(len(average_org)):
             average_org_int += average_org[j]
         average_org_int /= len(average_org)
@@ -146,7 +151,7 @@ def recreate_array(percentage):
 
 
 if __name__ == '__main__':
-    d = percentage_one(data_sound, data_mod_sound)  # .T[0]
+    d = percentage_one(data_sound, data_mod_sound, index, width)  # .T[0]
     name = "44 Pianisten 01-Promenade"
     plt.title("Percentage of comparison of two signals")
     plt.ylabel("Percentage")

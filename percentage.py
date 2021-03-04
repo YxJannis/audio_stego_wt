@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 import soundfile as sf
 
 
+# This function is used to gather all the needed information for the calculation process
 def get_args(path_org, path_mod):
+
     data_sound, f = sf.read(path_org)
     data_mod_sound, f = sf.read(path_mod)
 
@@ -134,21 +136,6 @@ def percentage_wav_2(audio_org, audio_mod):
         percentage.append(value)
 
     return percentage
-
-
-def recreate_array(percentage):
-    rec_sig = []
-    data_x = data_sound[1]
-    data_pair = []
-
-    for i in range(1000):
-        data_pair.append(data_x[i][0])
-
-    for x, y in zip(data_pair, percentage):
-        rec_sig.extend([[x, y]])
-    print('percentage array: \n')
-    print(rec_sig)
-    return rec_sig
 
 
 if __name__ == '__main__':

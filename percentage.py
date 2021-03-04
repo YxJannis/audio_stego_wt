@@ -6,7 +6,6 @@ import soundfile as sf
 
 # This function is used to gather all the needed information for the calculation process
 def get_args(path_org, path_mod):
-
     data_sound, f = sf.read(path_org)
     data_mod_sound, f = sf.read(path_mod)
 
@@ -74,6 +73,7 @@ def percentage_one(audio_org, audio_mod, start=None, end=None, index=None, width
 
         print("int")
         print(average_org_int)
+        print(average_mod_int)
         print("AVERAGE")
         print(average_org)
 
@@ -83,7 +83,8 @@ def percentage_one(audio_org, audio_mod, start=None, end=None, index=None, width
             elif audio_mod[i] == 0:
                 value = 1
             elif i == index:
-                value = abs((average_org_int - average_mod_int / average_org_int) * 100)
+                value = abs(1 - (average_org_int - average_mod_int / average_org_int))
+                # value = abs((average_org_int - average_mod_int / average_org_int) * 100)
             else:
                 value = abs(((audio_org[i] - audio_mod[i]) / audio_org[i]) * 100)
             result.append(value)

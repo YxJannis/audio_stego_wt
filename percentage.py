@@ -3,11 +3,11 @@ import sys
 import matplotlib.pyplot as plt
 import soundfile as sf
 
-data_sound, f = sf.read("input_files/orig/44 Pianisten 01-Promenade.wav")
-data_mod_sound, f = sf.read("output_files/mod/44 Pianisten 01-Promenade.wav")
 
+def get_args(path_org, path_mod):
+    data_sound, f = sf.read(path_org)
+    data_mod_sound, f = sf.read(path_mod)
 
-def get_args():
     try:
         start = int(sys.argv[1])
         end = int(sys.argv[2])
@@ -29,7 +29,8 @@ def get_args():
     print("Running script : ", sys.argv[0])
     print("Number of arguments: ", len(sys.argv))
     print("You chose those arguments: ", str(sys.argv))
-    return start, end, index, width
+
+    return data_sound, data_mod_sound, start, end, index, width
 
 
 # index is the wanted point where an average should be calculated
@@ -151,7 +152,9 @@ def recreate_array(percentage):
 
 
 if __name__ == '__main__':
-    start, end, index, width = get_args()
+    path_org = "input_files/orig/44 Pianisten 01-Promenade.wav"
+    path_mod = "output_files/mod/44 Pianisten 01-Promenade.wav"
+    data_sound, data_mod_sound, start, end, index, width = get_args(path_org, path_mod)
     d = percentage_one(data_sound, data_mod_sound, start, end, index, width)  # .T[0]
     name = "44 Pianisten 01-Promenade"
     plt.title("Percentage of comparison of two signals")

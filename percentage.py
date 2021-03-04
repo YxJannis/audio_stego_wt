@@ -7,29 +7,29 @@ data_sound, f = sf.read("input_files/orig/44 Pianisten 01-Promenade.wav")
 data_mod_sound, f = sf.read("output_files/mod/44 Pianisten 01-Promenade.wav")
 
 
-try:
-    start = int(sys.argv[1])
-    end = int(sys.argv[2])
+def get_args():
+    try:
+        start = int(sys.argv[1])
+        end = int(sys.argv[2])
 
-except:
-    print("You provided no area for closer inspection. Default plot will be created!")
-    start = 0
-    end = len(data_sound)
+    except:
+        print("You provided no area for closer inspection. Default plot will be created!")
+        start = 0
+        end = len(data_sound)
 
+    try:
+        index = int(sys.argv[3])
+        width = int(sys.argv[4])
+    except:
+        index = None
+        width = None
+        print("No index and frame provided")
 
-try:
-    index = int(sys.argv[3])
-    width = int(sys.argv[4])
-except:
-    index = None
-    width = None
-    print("No index and frame provided")
-
-
-print("samples = {}".format(f))
-print("Running script : ", sys.argv[0])
-print("Number of arguments: ", len(sys.argv))
-print("You chose those arguments: ", str(sys.argv))
+    print("samples = {}".format(f))
+    print("Running script : ", sys.argv[0])
+    print("Number of arguments: ", len(sys.argv))
+    print("You chose those arguments: ", str(sys.argv))
+    return start, end, index, width
 
 
 # index is the wanted point where an average should be calculated
@@ -151,6 +151,7 @@ def recreate_array(percentage):
 
 
 if __name__ == '__main__':
+    start, end, index, width = get_args()
     d = percentage_one(data_sound, data_mod_sound, start, end, index, width)  # .T[0]
     name = "44 Pianisten 01-Promenade"
     plt.title("Percentage of comparison of two signals")

@@ -196,7 +196,7 @@ def plot_error_dist_rates(error_rates: list, double_error_rates: list, triple_er
     plt.scatter(y=triple_error_rates, x=x_vals, color='green', label='Triple Error')
     plt.ylabel("Error Rate")
     plt.legend(loc='upper center')
-    plt.margins(0.1)
+    plt.margins(y=0.1)
     # plt.show()
     plt.grid(axis='y', linestyle='--')
     plt.savefig(f'plot_images/{name}_rel.png')

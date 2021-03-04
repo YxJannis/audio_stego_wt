@@ -35,7 +35,7 @@ print("You chose those arguments: ", str(sys.argv))
 # index is the wanted point where an average should be calculated
 # width represents the range to the left and right of this given point
 # both parameters are optional, but if you provide one you have to pass the other one as well.
-def percentage_one(audio_org, audio_mod, index, width):
+def percentage_one(audio_org, audio_mod, start=None, end=None, index=None, width=None):
     rounds = len(audio_org)
     result = []
 

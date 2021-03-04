@@ -174,14 +174,32 @@ def plot_error_dist(error_rates: list, double_errors: list, triple_errors: list,
 def plot_error_dist_rates(error_rates: list, double_error_rates: list, triple_error_rates: list, embed_bits: list,
                           name: str = 'default'):
     x_vals = embed_bits
-    fig, ax = plt.subplots()
-    ax.set_xlabel('Embed Bit')
-    ax.set_yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7])
-    ax.scatter(y=error_rates, x=x_vals, color='red', label='Single Error')
-    ax.scatter(y=double_error_rates, x=x_vals, color='blue', label='Double Error')
-    ax.scatter(y=triple_error_rates, x=x_vals, color='green', label='Triple Error')
-    ax.set_ylabel("#Subsequent errors")
-    plt.legend(loc='upper left')
-    plt.show()
+    plt.xlabel('Embed Bit')
+
+    max_value = 0.3
+
+    for i in range(len(error_rates)):
+        if error_rates[i] > max_value:
+            error_rates[i] = max_value
+    for i in range(len(double_error_rates)):
+        if error_rates[i] > max_value:
+            error_rates[i] = max_value
+    for i in range(len(triple_error_rates)):
+        if error_rates[i] > max_value:
+            error_rates[i] = max_value
+    ticks = [i/10 for i in range(0, int(max_value*10)+1)]
+    plt.yticks(ticks, [f'{i}' for i in ticks[:-1]] + [f'>{ticks[-1]}'])
+    plt.ylim(0, max_value)
+    plt.xticks(embed_bits)
+    plt.scatter(y=error_rates, x=x_vals, color='red', label='Single Error')
+    plt.scatter(y=double_error_rates, x=x_vals, color='blue', label='Double Error')
+    plt.scatter(y=triple_error_rates, x=x_vals, color='green', label='Triple Error')
+    plt.ylabel("Error Rate")
+    plt.legend(loc='upper center')
+    plt.margins(0.1)
+    # plt.show()
+    plt.grid(axis='y', linestyle='--')
+    plt.savefig(f'plot_images/{name}_rel.png')
     plt.close()
+
 

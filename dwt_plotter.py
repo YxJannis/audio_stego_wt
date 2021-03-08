@@ -5,24 +5,9 @@ import matplotlib as mpl
 import numpy as np
 from embedder import Embedder
 from detector import Detector
-import argparse
 import percentage
 
 audio_file_promenade_1 = "input_files/SaChenPromenade1.wav"
-
-
-def plot_wt(audio_file, ax=None):
-    sampling_frequency, data = wavfile.read(audio_file)
-
-    print(f"number of channels = {data.shape[1]}")
-    length = data.shape[0] / sampling_frequency
-    print(f"length = {length}s")
-    time = np.linspace(0., length, data.shape[0])
-
-    plt.plot(time, data.T[0], label="Left channel")
-    plt.title("Audio Data (left channel)")
-
-    return plt
 
 
 def plot_coeff(audio_file, ax=None):
@@ -44,50 +29,7 @@ def plot_coeff(audio_file, ax=None):
     return plt
 
 
-def plot_diff(difference_array, ax=None):
-    plt.title("Difference (original vs. embedded)")
-    plt.plot(difference_array)
-    return plt
-
-
-def plot_master(audio_file, difference_array):
-    parser = argparse.ArgumentParser(description='Enter the wanted plots.')
-    parser.add_argument('-s', '--stereo', help='Request the stereo plot', default='check_string_for_empty',
-                        required=False)
-    parser.add_argument('-d', '--difference', help="Request the difference plot", default='check_string_for_empty_',
-                        required=False)
-    parser.add_argument('-c', '--coefficients', help="Request the coefficient plot", default='check_string_for_empty_c',
-                        required=False)
-    args = parser.parse_args()
-
-    num = 0
-
-    fig, [ax1, ax2, ax3] = plt.subplots(3)
-
-    if args.stereo:
-        num += 1
-        fig.add_subplot(3, 1, num)
-        print("Stereo plot creating...")
-        plot_wt(audio_file, ax1)
-
-    if args.difference:
-        num += 1
-        fig.add_subplot(3, 1, num)
-        print("Difference plot creating...")
-        plot_diff(difference_array, ax2)
-
-    if args.coefficients:
-        num += 1
-        fig.add_subplot(3, 1, num)
-        print("Coeffs plot creating...")
-        plot_coeff(audio_file, ax3)
-
-    fig.tight_layout()
-    plt.savefig('plot_images/plot.png')
-    plt.show()
-
-
-def plot_master_2(emb: Embedder, det: Detector, file_title: str, message_seed: int = None):
+def plot_master(emb: Embedder, det: Detector, file_title: str, message_seed: int = None):
     mpl.rcParams['agg.path.chunksize'] = 10000
     og_signal_data = emb.cover_audio_file.signal_data[0]          # [0] for channel 1
     emb_signal_data = emb.reconstructed_audio.signal_data[0]        # [0] for channel 1
@@ -143,29 +85,6 @@ def plot_error_rates(values: dict, name: str = 'default'):
     plt.title(name)
     plt.ylabel('Error Rate')
     plt.xlabel('Embed Bit')
-    # plt.show()
-    plt.savefig(f'plot_images/{name}.png')
-    plt.close()
-
-
-def plot_error_dist(error_rates: list, double_errors: list, triple_errors: list, embed_bits: list,
-                    name: str = 'default'):
-    fig, ax = plt.subplots()
-    ax.scatter(y=error_rates, x=embed_bits, color='black', label='Error Rate', marker='o')
-    ax.set_yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
-    ax.set_xticks(embed_bits)
-    ax.set_xlabel('Embed Bit')
-    ax.set_ylabel('Error Rate')
-    ax2 = ax.twinx()
-    ax2.scatter(y=triple_errors, x=embed_bits, color='red', label='#Triple Errors', marker='o')
-    ax2.scatter(y=double_errors, x=embed_bits, color='blue', label='#Double Errors', marker='o')
-    ax2.set_ylabel("# of subsequent Errors", color='blue')
-    plt.title(name)
-    ax_lines, ax_labels = ax.get_legend_handles_labels()
-    ax2_lines, ax2_labels = ax2.get_legend_handles_labels()
-    ax2.set_yscale('log')
-    plt.legend(ax_lines + ax2_lines, ax_labels + ax2_labels, loc='upper center')
-    plt.grid(linestyle='--')
     # plt.show()
     plt.savefig(f'plot_images/{name}.png')
     plt.close()

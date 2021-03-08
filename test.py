@@ -1,7 +1,7 @@
 from embedder import Embedder
 from detector import Detector
 from audio_file import AudioFile
-from dwt_plotter import plot_master_2, plot_error_rates, plot_error_dist, plot_error_dist_rates
+from dwt_plotter import plot_master, plot_error_rates, plot_error_dist, plot_error_dist_rates
 
 # Goal: broad testing over range of embed_bits for different wavelet types to measure which wavelet type at which
 # embedding bit is most robust & least audible
@@ -45,7 +45,7 @@ def generate_plots(file):
             error_rate = AudioFile.check_error_rate(e.message, d.detected_message)
 
             # plot
-            plot_master_2(e, d, file_title, seed)
+            plot_master(e, d, file_title, seed)
             error_rates[emb_bit] = error_rate
 
         plot_error_rates(error_rates, f'Error_Rates_{wavelet_type}')

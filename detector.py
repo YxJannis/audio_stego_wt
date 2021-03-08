@@ -30,7 +30,6 @@ class Detector:
               f'\n--------------------------')
 
         self.approx_coeffs, self.detail_coeffs = pywt.dwt(self.audio_file.signal_data, self.wavelet_type)
-        # print(f'Detail_coefficients for channel 1: \n{self.detail_coeffs[0]}')
 
         extracted_message = ""
         for i in range(len(self.detail_coeffs[0])):

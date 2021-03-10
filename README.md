@@ -1,10 +1,10 @@
 # Audio Steganography
 Experimental code for embedding steganographic messages in audio signals using
-- Discrete/Continuous Wavelet Transform
+- (multilevel) Discrete Wavelet Transform
 - Echo Hiding 
-- Spread Spectrum encoding
+- Spread Spectrum embedding
 
-standalone or in conjunction with each other.
+standalone or in conjunction with each other. 
 
 Furthermore, some methods for steganalysis were tested and analyzed.
 

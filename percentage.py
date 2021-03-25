@@ -45,9 +45,17 @@ def percentage_one(audio_org, audio_mod, start=None, end=None, index=None, width
         print("First")
         for i in range(rounds):
             if audio_org[i] == 0:
-                value = 0.0
+                test = audio_org[i - 5: i + 5]
+                for j in range(len(test)):
+                    value += test[j]
+                value /= len(test)
+                # value = 0.0
             elif audio_mod[i] == 0:
-                value = 1
+                test = audio_mod[i - 5: i + 5]
+                for j in range(len(test)):
+                    value += test[j]
+                value /= len(test)
+                # value = 1
             else:
                 value = abs(((audio_org[i] - audio_mod[i]) / audio_org[i]) * 100)
             result.append(value)

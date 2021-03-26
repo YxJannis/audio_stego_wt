@@ -1,5 +1,6 @@
 from pywt import wavedec, downcoef, waverec
 from audio_file import AudioFile
+import numpy as np
 
 
 def decomposition(audio_file: AudioFile, level: int = 1, wavelet_type: str = 'db2', print_out: bool = False):
@@ -23,7 +24,8 @@ def decomposition(audio_file: AudioFile, level: int = 1, wavelet_type: str = 'db
         list of size level +1 containing approximation coefficients and
         detail coefficients of each level, specific detail coefficients for level
     """
-    if len(audio_file.signal_data[0] > 1):         # check if more than one channel exists, select first channel if so
+    sig_data = np.array(audio_file.signal_data)
+    if len(sig_data.shape) > 1:  # check if more than one channel exists, select first channel if so
         signal_data = audio_file.signal_data[0]
     else:
         signal_data = audio_file.signal_data
@@ -91,20 +93,26 @@ def reconstruct_w_modified_dcoeffs(full_coeffs, mod_dcoeffs, wavelet_type: str =
 if __name__ == '__main__':
     # HowTo:
     # Initialize cover AudioFile
-    cover_audio_file = AudioFile('input_files/SaChenPromenade1.wav')
+    # cover_audio_file = AudioFile('input_files/SaChenPromenade1.wav')
+    cover_audio_file = AudioFile('input_files/file_example_WAV_2MG.wav')
 
     # specify wavelet type and desired decomposition depth/level ('db2' can be used as default)
-    wavelet = 'db2'
-    decomposition_level = 4
+    wavelet = 'haar'
+    decomposition_level = 2
+
+    print(f'original audio:\n{cover_audio_file.signal_data[0]}')
 
     # perform decomposition
-    all_coeffs, dc = decomposition(cover_audio_file, wavelet_type=wavelet, level=decomposition_level, print_out=True)
+    all_coeffs, dc = decomposition(cover_audio_file, wavelet_type=wavelet, level=decomposition_level, print_out=False)
 
     # TODO: modify detail coefficients dc (e.g. by embedding in them)
     modified_dc = dc
 
     # reconstruct audio file by passing unmodified coefficients (all_coeffs) and modified detail coefficients from
     # decomposition_level (modified_dc) to function
-    reconstructed_audio = reconstruct_w_modified_dcoeffs(all_coeffs, modified_dc, level=decomposition_level)
+    reconstructed_audio = reconstruct_w_modified_dcoeffs(all_coeffs, modified_dc, level=decomposition_level,
+                                                         wavelet_type=wavelet)
+
+    print(f'Reconstructed audio:\n{reconstructed_audio}')
 
     # enjoy the reconstructed audio

@@ -1,6 +1,7 @@
 import pywt
 from audio_file import AudioFile
 from detector import Detector
+from random import choice
 
 
 class Embedder:
@@ -93,10 +94,15 @@ class Embedder:
 
 
 if __name__ == '__main__':
-    em_bit = 12
-    e = Embedder(f'input_files/SaChenPromenade1.wav', output_file_name=f'output_files/wt_bit{em_bit}_embedding.wav',
-                 embed_bit=em_bit)
-    d = Detector(f'output_files/wt_bit{em_bit}_embedding.wav', embed_bit=em_bit)
-    print(f'Error Rate: {AudioFile.check_error_rate(e.message, d.detected_message)}')
+    em_bit = 7
+    #e = Embedder(f'input_files/SaChenPromenade1.wav', output_file_name=f'output_files/wt_bit{em_bit}_embedding.wav',
+    #             embed_bit=em_bit)
+    #d = Detector(f'output_files/wt_bit{em_bit}_embedding.wav', embed_bit=em_bit)
+
+    msg = ''.join(choice('01') for _ in range(1000000))
+
+    e = Embedder(filepath=f'input_files/file_example_WAV_2MG.wav',
+                 output_file_name=f'output_files/file_example_embedded_14.wav', embed_bit=em_bit, msg=msg)
+    #print(f'Error Rate: {AudioFile.check_error_rate(e.message, d.detected_message)}')
 
 
